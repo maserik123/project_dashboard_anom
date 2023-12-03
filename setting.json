@@ -1,0 +1,36 @@
+{
+    "connection":[
+        {
+            "env":"default",
+            "hostname":"localhost",
+            "username":"root",
+            "password":"",
+            "database":"monitoring_project",
+            "dbdriver":"mysqli"
+        }
+    ],
+    "general":{
+        "isProdEnv":false,
+        "base_url":"http://localhost/monitoring_project/",
+        "invalidIP":"0.0.0.0",
+        "localIP":"127.0.0.1",
+        "installed":true,
+        "default_controller" :"Administrator",
+        "libraries": ["database","session","globals","bcrypt","form_validation","datatables"],
+        "helper":["url", "file", "form", "datetime_helper","button_helper","currency_format_helper","encrypt_helper","format_helper","my_function_helper","notif&log_helper","upload_helper","xss_helper"],
+        "models":[
+            "Model_user_login", 
+            "Model_user", 
+            "Model_user_role",
+            "Model_ProjectMaster",
+            "Model_ProjectCriteria",
+            "Model_ProjectInformation",
+            "Model_ProjectHeader",
+            "Model_ProjectDetails",
+            "Model_ProjectPICHeader",
+            "Model_ProjectPICDetails",
+            "Model_ProjectStatus",
+            "Model_RiskMitigation"
+        ]
+    }
+}
