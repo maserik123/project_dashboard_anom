@@ -38,17 +38,48 @@ class Administrator extends CI_Controller
                 $th5    = '<div class="text-center">' . $row->criteria_project_name . '</div>';
                 $th6    = '<div class="text-center">' . $row->start_date . '</div>';
                 $th7    = '<div class="text-center">' . $row->end_date . '</div>';
-                $th8    = '<div class="text-center">' . $row->duration . '</div>';
+                $th8    = '<div class="text-center">' . number_format_decimal($row->duration) . '</div>';
                 $th9    = '<div class="text-center">' . $row->capex_budget . '</div>';
                 $th10    = '<div class="text-center">' . $row->capex_realization . '</div>';
                 $th11    = '<div class="text-center">' . $row->revenue_target . '</div>';
                 $th12    = '<div class="text-center">' . $row->revenue_realization . '</div>';
                 $th13    = '<div class="text-center">' . $row->status_name . '</div>';
-                $th14    = '<div class="text-center">' . $row->progress . '</div>';
-                $th15    = '<div class="text-center">' . $row->mitigation . '</div>';
-                $th16    = '<div class="text-center">' . $row->checklist . '</div>';
-                $th17    = '<div class="text-center">' . $row->update_status . '</div>';
-                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th8, $th9, $th10, $th11, $th12, $th13, $th14, $th15, $th16, $th17));
+                $th14    = '<div class="text-center">' . $row->progress_project . '</div>';
+                $th15    = '<div class="text-center">' . $row->progress_fisik . '</div>';
+                $th16    = '<div class="text-center">' . $row->progress_kajian . '</div>';
+                $th17    = '<div class="text-center">' . $row->mitigation . '</div>';
+                $th18    = '<div class="text-center">' . $row->checklist . '</div>';
+                $th19    = '<div class="text-center">' . $row->update_status . '</div>';
+                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th8, $th9, $th10, $th11, $th12, $th13, $th14, $th15, $th16, $th17, $th18, $th19));
+            }
+            $dt['data'] = $data;
+            echo json_encode($dt);
+            die;
+        } else if ($param == 'getDataDashboard') {
+            $dt = $this->Model_ProjectHeader->getAllData();
+            $start = $this->input->post('start');
+            $data = array();
+            foreach ($dt['data'] as $row) {
+                $userid     = ($row->project_m_hdr_id);
+                $th1    = '<div class="text-center">' . ++$start . '</div>';
+                $th2   = '<div class="text-center" style="width:100px;">' . (get_btn_detail('updateData(' . $userid . ')')) . '</div>';
+                $th3    = '<div class="text-center">' . $row->project_name . '</div>';
+                $th4    = '<div class="text-center">' . $row->pic_project_name . '</div>';
+                $th5    = '<div class="text-center">' . $row->criteria_project_name . '</div>';
+                $th6    = '<div class="text-center">' . $row->start_date . '</div>';
+                $th7    = '<div class="text-center">' . $row->end_date . '</div>';
+                $th9    = '<div class="text-center">' . $row->capex_budget . '</div>';
+                $th10    = '<div class="text-center">' . $row->capex_realization . '</div>';
+                $th11    = '<div class="text-center">' . $row->revenue_target . '</div>';
+                $th12    = '<div class="text-center">' . $row->revenue_realization . '</div>';
+                $th13    = '<div class="text-center">' . $row->status_name . '</div>';
+                $th14    = '<div class="text-center">' . $row->progress_project . '</div>';
+                $th15    = '<div class="text-center">' . $row->progress_fisik . '</div>';
+                $th16    = '<div class="text-center">' . $row->progress_kajian . '</div>';
+                $th17    = '<div class="text-center">' . $row->mitigation . '</div>';
+                $th18    = '<div class="text-center">' . $row->checklist . '</div>';
+                $th19    = '<div class="text-center">' . $row->update_status . '</div>';
+                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th9, $th10, $th11, $th12, $th13, $th14, $th15, $th16, $th17, $th18, $th19));
             }
             $dt['data'] = $data;
             echo json_encode($dt);
@@ -56,16 +87,16 @@ class Administrator extends CI_Controller
         } else if ($param == 'insert') {
             $this->form_validation->set_rules("master_project_id", "Project Name", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("pic_project_hdr_id", "Project PIC", "trim|required", array('required' => '{field} cannot be null !'));
-            $this->form_validation->set_rules("criteria_project_id", "Project Criteria", "trim|required", array('required' => '{field} cannot be null !'));
+            // $this->form_validation->set_rules("criteria_project_id", "Project Criteria", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("start_date", "Start Data", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("end_date", "End Date", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("capex_budget", "Capex Budget", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("capex_realization", "Capex Realization", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("revenue_target", "Revenue target", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("revenue_realization", "Revenue Realization", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("progress_fisik", "Progress Fisik", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("progress_kajian", "Progress Kajian", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("project_status_id", "Project Status", "trim|required", array('required' => '{field} cannot be null !'));
-            $this->form_validation->set_rules("progress", "Progress", "trim|required", array('required' => '{field} cannot be null !'));
-            // $this->form_validation->set_rules("update_status", "Update Status", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_error_delimiters('<small id="text-error" style="color:red;">* ', '</small>');
             if ($this->form_validation->run() == FALSE) {
                 $result = array('status' => 'error', 'msg' => 'Data is not right, please check again.');
@@ -76,15 +107,16 @@ class Administrator extends CI_Controller
                 $data = array(
                     'master_project_id'          => htmlspecialchars($this->input->post('master_project_id')),
                     'pic_project_hdr_id'          => htmlspecialchars($this->input->post('pic_project_hdr_id')),
-                    'criteria_project_id'          => htmlspecialchars($this->input->post('criteria_project_id')),
+                    // 'criteria_project_id'          => htmlspecialchars($this->input->post('criteria_project_id')),
                     'start_date'          => htmlspecialchars($this->input->post('start_date')),
                     'end_date'          => htmlspecialchars($this->input->post('end_date')),
                     'capex_budget'          => htmlspecialchars($this->input->post('capex_budget')),
                     'capex_realization'          => htmlspecialchars($this->input->post('capex_realization')),
                     'revenue_target'          => htmlspecialchars($this->input->post('revenue_target')),
                     'revenue_realization'          => htmlspecialchars($this->input->post('revenue_realization')),
+                    'progress_fisik'          => htmlspecialchars($this->input->post('progress_fisik')),
+                    'progress_kajian'          => htmlspecialchars($this->input->post('progress_kajian')),
                     'project_status_id'          => htmlspecialchars($this->input->post('project_status_id')),
-                    'progress'          => htmlspecialchars($this->input->post('progress')),
                     'crt_date'          => date('Y-m-d'),
                     'update_date'          => date('Y-m-d'),
                 );
@@ -105,16 +137,16 @@ class Administrator extends CI_Controller
         } else if ($param == 'update') {
             $this->form_validation->set_rules("master_project_id", "Project Name", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("pic_project_hdr_id", "Project PIC", "trim|required", array('required' => '{field} cannot be null !'));
-            $this->form_validation->set_rules("criteria_project_id", "Project Criteria", "trim|required", array('required' => '{field} cannot be null !'));
+            // $this->form_validation->set_rules("criteria_project_id", "Project Criteria", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("start_date", "Start Data", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("end_date", "End Date", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("capex_budget", "Capex Budget", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("capex_realization", "Capex Realization", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("revenue_target", "Revenue target", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("revenue_realization", "Revenue Realization", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("progress_fisik", "Progress Fisik", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("progress_kajian", "Progress Kajian", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("project_status_id", "Project Status", "trim|required", array('required' => '{field} cannot be null !'));
-            $this->form_validation->set_rules("progress", "Progress", "trim|required", array('required' => '{field} cannot be null !'));
-            // $this->form_validation->set_rules("update_status", "Update Status", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_error_delimiters('<small id="text-error" style="color:red;">*', '</small>');
             if ($this->form_validation->run() == FALSE) {
                 $result = array('status' => 'error', 'msg' => 'Data yang anda isi belum benar !');
@@ -126,15 +158,16 @@ class Administrator extends CI_Controller
                 $data = array(
                     'master_project_id'          => htmlspecialchars($this->input->post('master_project_id')),
                     'pic_project_hdr_id'          => htmlspecialchars($this->input->post('pic_project_hdr_id')),
-                    'criteria_project_id'          => htmlspecialchars($this->input->post('criteria_project_id')),
+                    // 'criteria_project_id'          => htmlspecialchars($this->input->post('criteria_project_id')),
                     'start_date'          => htmlspecialchars($this->input->post('start_date')),
                     'end_date'          => htmlspecialchars($this->input->post('end_date')),
                     'capex_budget'          => htmlspecialchars($this->input->post('capex_budget')),
                     'capex_realization'          => htmlspecialchars($this->input->post('capex_realization')),
                     'revenue_target'          => htmlspecialchars($this->input->post('revenue_target')),
                     'revenue_realization'          => htmlspecialchars($this->input->post('revenue_realization')),
+                    'progress_kajian'          => htmlspecialchars($this->input->post('progress_kajian')),
+                    'progress_fisik'          => htmlspecialchars($this->input->post('progress_fisik')),
                     'project_status_id'          => htmlspecialchars($this->input->post('project_status_id')),
-                    'progress'          => htmlspecialchars($this->input->post('progress')),
                     'update_date'          => date('Y-m-d'),
                 );
                 $result['messages']    = '';

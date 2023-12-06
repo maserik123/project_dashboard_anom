@@ -211,7 +211,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Master Criteria List</h3>
+                        <h3 class="card-title">Master Criteria / Type List</h3>
                         <div class="text-right">
                             <button onclick="add()" class="btn btn-primary btn-sm">
                                 <li class="fas fa-plus"></li> Add Data
@@ -224,7 +224,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Criteria Project Name</th>
+                                    <th>Criteria / Type Project Name</th>
                                     <th>Tools</th>
                                 </tr>
                             </thead>
@@ -250,7 +250,7 @@
                 <div class="modal-body">
                     <input type="hidden" name='criteria_project_id' value="" id='criteria_project_id'>
                     <div class="item form-group">
-                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Criteria Project Name <span class="required">*</span>
+                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Criteria/Type Project Name <span class="required">*</span>
                         </label>
                         <div class="col-md-12 col-sm-9 col-xs-12">
                             <input type="text" id="criteria_project_name" name="criteria_project_name" placeholder="Criteria Project Name" required="required" class="form-control ">

@@ -261,7 +261,7 @@
                         </div>
                     </div>
                     <div class="item form-group">
-                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Criteria Project <span class="required">*</span>
+                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Criteria/Type Project <span class="required">*</span>
                         </label>
                         <div class="col-md-12 col-sm-9 col-xs-12">
                             <select name="criteria_project_id" id="criteria_project_id" class="form-control">
@@ -273,7 +273,7 @@
                         </div>
                     </div>
                     <div class="item form-group">
-                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Criteria Project <span class="required">*</span>
+                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Description Project <span class="required">*</span>
                         </label>
                         <div class="col-md-12 col-sm-9 col-xs-12">
                             <textarea name="project_description" id="project_description" class="form-control" cols="30" rows="5"></textarea>

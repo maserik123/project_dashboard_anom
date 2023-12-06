@@ -76,7 +76,8 @@
                 $('[name="revenue_target"]').val(data.revenue_target);
                 $('[name="revenue_realization"]').val(data.revenue_realization);
                 $('[name="project_status_id"]').val(data.project_status_id);
-                $('[name="progress"]').val(data.progress);
+                $('[name="progress_kajian"]').val(data.progress_kajian);
+                $('[name="progress_fisik"]').val(data.progress_fisik);
                 // $('[name="criteria_project_name"]').val(data.criteria_project_name);
                 $('#modalMasterProject').modal('show');
                 $('.modal-title').text('Edit Data Master Project');
@@ -238,7 +239,7 @@
                                     <th>Tools</th>
                                     <th>Project Name</th>
                                     <th>PIC Project</th>
-                                    <th>Criteria Project Name</th>
+                                    <th>Criteria/Type Name</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
                                     <th>Duration</th>
@@ -247,7 +248,9 @@
                                     <th>Revenue Target</th>
                                     <th>Revenue Realization</th>
                                     <th>Status</th>
-                                    <th>Progress</th>
+                                    <th>Progress Project</th>
+                                    <th>Progress Fisik</th>
+                                    <th>Progress Kajian</th>
                                     <th>Mitigation</th>
                                     <th>Checklist</th>
                                     <th>Update Status</th>
@@ -298,7 +301,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="item form-group">
+                    <!-- <div class="item form-group">
                         <label class="control-label col-md-12 col-sm-3 col-xs-12"> Criteria Project <span class="required">*</span>
                         </label>
                         <div class="col-md-12 col-sm-9 col-xs-12">
@@ -309,7 +312,7 @@
                                 <?php } ?>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="item form-group">
                         <label class="control-label col-md-12 col-sm-3 col-xs-12"> Start Date <span class="required">*</span>
                         </label>
@@ -328,35 +331,55 @@
                         <label class="control-label col-md-12 col-sm-3 col-xs-12"> Capex Budget <span class="required">*</span>
                         </label>
                         <div class="col-md-12 col-sm-9 col-xs-12">
-                            <input type="text" id="capex_budget" name="capex_budget" placeholder="Capex Budget" required="required" class="form-control ">
+                            <input type="number" id="capex_budget" name="capex_budget" placeholder="Capex Budget" required="required" class="form-control ">
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="control-label col-md-12 col-sm-3 col-xs-12"> Capex Realization <span class="required">*</span>
                         </label>
                         <div class="col-md-12 col-sm-9 col-xs-12">
-                            <input type="text" id="capex_realization" name="capex_realization" placeholder="Capex Realization" required="required" class="form-control ">
+                            <input type="number" id="capex_realization" name="capex_realization" placeholder="Capex Realization" required="required" class="form-control ">
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="control-label col-md-12 col-sm-3 col-xs-12"> Revenue target <span class="required">*</span>
                         </label>
                         <div class="col-md-12 col-sm-9 col-xs-12">
-                            <input type="text" id="revenue_target" name="revenue_target" placeholder="Revenue Target" required="required" class="form-control ">
+                            <input type="number" id="revenue_target" name="revenue_target" placeholder="Revenue Target" required="required" class="form-control ">
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="control-label col-md-12 col-sm-3 col-xs-12"> Revenue Realization <span class="required">*</span>
                         </label>
                         <div class="col-md-12 col-sm-9 col-xs-12">
-                            <input type="text" id="revenue_realization" name="revenue_realization" placeholder="Revenue Realization" required="required" class="form-control ">
+                            <input type="number" id="revenue_realization" name="revenue_realization" placeholder="Revenue Realization" required="required" class="form-control ">
                         </div>
                     </div>
                     <div class="item form-group">
-                        <label class="control-label col-md-12 col-sm-3 col-xs-12"> Status <span class="required">*</span>
+                        <label class="control-label col-md-12 col-sm-3 col-xs-12"> Progress Fisik <span class="required">*</span>
                         </label>
                         <div class="col-md-12 col-sm-9 col-xs-12">
-                            <input type="text" id="project_status_id" name="project_status_id" placeholder="Status" required="required" class="form-control ">
+                            <input type="number" id="progress_fisik" name="progress_fisik" placeholder="progress fisik" required="required" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-12 col-sm-3 col-xs-12"> Progress Kajian <span class="required">*</span>
+                        </label>
+                        <div class="col-md-12 col-sm-9 col-xs-12">
+                            <input type="number" id="progress_kajian" name="progress_kajian" placeholder="progress kajian" required="required" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Project Status <span class="required">*</span>
+                        </label>
+                        <div class="col-md-12 col-sm-9 col-xs-12">
+                            <select name="project_status_id" id="project_status_id" class="form-control">
+                                <option value="">Selet Project Status</option>
+                                <?php foreach ($getProjectStatus as $row) { ?>
+                                    <option value="<?php echo $row->project_status_id; ?>"><?php echo $row->status_name; ?></option>
+                                <?php } ?>
+                            </select>
+                            <!-- <input type="text" id="project_status_id" name="project_status_id" placeholder="Status" required="required" class="form-control "> -->
                         </div>
                     </div>
                     <!-- <div class="item form-group">

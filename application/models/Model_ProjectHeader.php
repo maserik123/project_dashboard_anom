@@ -23,8 +23,10 @@ class Model_ProjectHeader extends CI_Model
         a.revenue_target, 
         a.revenue_realization, 
         e.status_name, 
-        a.progress, 
-        a.update_status ');
+        a.progress_project, 
+        a.progress_fisik, 
+        a.progress_kajian, 
+        a.update_status, a.update_status ');
         $this->datatables->from('project_m_hdr a');
         $this->datatables->join('master_project b', 'b.master_project_id = a.master_project_id', 'inner');
         $this->datatables->join('pic_project_hdr c', 'c.pic_project_hdr_id = a.pic_project_hdr_id', 'inner');
@@ -35,7 +37,7 @@ class Model_ProjectHeader extends CI_Model
 
     function getAllData()
     {
-        $this->datatables->select('project_m_hdr_id, project_name, pic_project_name, criteria_project_name, start_date, end_date, duration, capex_budget, capex_realization, revenue_target, revenue_realization, status_name, progress, mitigation, checklist, update_status');
+        $this->datatables->select('project_m_hdr_id, project_name, pic_project_name, criteria_project_name, start_date, end_date, duration, capex_budget, capex_realization, revenue_target, revenue_realization, status_name, progress_project, progress_fisik, progress_kajian, mitigation, checklist, foto, update_status');
         $this->datatables->from('v_project_m_hdr');
         return $this->datatables->generate();
     }
