@@ -2,6 +2,11 @@
     <div class="container-fluid">
         <!-- Info boxes -->
         <div class="row">
+            <div class="col-md-12">
+                <h1>Dashboard</h1>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-3 col-6">
                 <!-- small card -->
                 <div class="small-box bg-blue">

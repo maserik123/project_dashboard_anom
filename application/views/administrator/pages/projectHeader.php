@@ -73,6 +73,7 @@
                 $('[name="end_date"]').val(data.end_date);
                 $('[name="capex_budget"]').val(data.capex_budget);
                 $('[name="capex_realization"]').val(data.capex_realization);
+                $('[name="contract_value"]').val(data.contract_value);
                 $('[name="revenue_target"]').val(data.revenue_target);
                 $('[name="revenue_realization"]').val(data.revenue_realization);
                 $('[name="project_status_id"]').val(data.project_status_id);
@@ -245,6 +246,7 @@
                                     <th>Duration</th>
                                     <th>Capex Budget</th>
                                     <th>Capex Realization</th>
+                                    <th>Contract Value</th>
                                     <th>Revenue Target</th>
                                     <th>Revenue Realization</th>
                                     <th>Status</th>
@@ -339,6 +341,13 @@
                         </label>
                         <div class="col-md-12 col-sm-9 col-xs-12">
                             <input type="number" id="capex_realization" name="capex_realization" placeholder="Capex Realization" required="required" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-12 col-sm-3 col-xs-12"> Contract Value <span class="required">*</span>
+                        </label>
+                        <div class="col-md-12 col-sm-9 col-xs-12">
+                            <input type="number" id="contract_value" name="contract_value" placeholder="Contract Value" required="required" class="form-control ">
                         </div>
                     </div>
                     <div class="item form-group">

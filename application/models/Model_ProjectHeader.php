@@ -37,7 +37,7 @@ class Model_ProjectHeader extends CI_Model
 
     function getAllData()
     {
-        $this->datatables->select('project_m_hdr_id, project_name, pic_project_name, criteria_project_name, start_date, end_date, duration, capex_budget, capex_realization, revenue_target, revenue_realization, status_name, progress_project, progress_fisik, progress_kajian, mitigation, checklist, foto, update_status');
+        $this->datatables->select('project_m_hdr_id, project_name, pic_project_name, criteria_project_name, start_date, end_date, duration, capex_budget, capex_realization,, contract_value, revenue_target, revenue_realization, status_name, progress_project, progress_fisik, progress_kajian, mitigation, checklist, foto, update_status');
         $this->datatables->from('v_project_m_hdr');
         return $this->datatables->generate();
     }

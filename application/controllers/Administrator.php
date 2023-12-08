@@ -10,6 +10,7 @@ class Administrator extends CI_Controller
         $view['title'] = 'Home Page';
         $view['pageName'] = 'dashboard';
         $view['a_dashboard'] = 'active';
+        $view['projectActiveMore30Day'] = $this->db->query("SELECT COUNT(*) FROM project_m_hdr WHERE DATEDIFF(end_date, CURRENT_DATE()) > 30");
 
         $this->load->view('administrator/index', $view);
     }
@@ -41,16 +42,17 @@ class Administrator extends CI_Controller
                 $th8    = '<div class="text-center">' . number_format_decimal($row->duration) . '</div>';
                 $th9    = '<div class="text-center">' . $row->capex_budget . '</div>';
                 $th10    = '<div class="text-center">' . $row->capex_realization . '</div>';
-                $th11    = '<div class="text-center">' . $row->revenue_target . '</div>';
-                $th12    = '<div class="text-center">' . $row->revenue_realization . '</div>';
-                $th13    = '<div class="text-center">' . $row->status_name . '</div>';
-                $th14    = '<div class="text-center">' . $row->progress_project . '</div>';
-                $th15    = '<div class="text-center">' . $row->progress_fisik . '</div>';
-                $th16    = '<div class="text-center">' . $row->progress_kajian . '</div>';
-                $th17    = '<div class="text-center">' . $row->mitigation . '</div>';
-                $th18    = '<div class="text-center">' . $row->checklist . '</div>';
-                $th19    = '<div class="text-center">' . $row->update_status . '</div>';
-                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th8, $th9, $th10, $th11, $th12, $th13, $th14, $th15, $th16, $th17, $th18, $th19));
+                $th11    = '<div class="text-center">' . $row->contract_value . '</div>';
+                $th12    = '<div class="text-center">' . $row->revenue_target . '</div>';
+                $th13    = '<div class="text-center">' . $row->revenue_realization . '</div>';
+                $th14    = '<div class="text-center">' . $row->status_name . '</div>';
+                $th15    = '<div class="text-center">' . $row->progress_project . '</div>';
+                $th16    = '<div class="text-center">' . $row->progress_fisik . '</div>';
+                $th17    = '<div class="text-center">' . $row->progress_kajian . '</div>';
+                $th18    = '<div class="text-center">' . $row->mitigation . '</div>';
+                $th19    = '<div class="text-center">' . $row->checklist . '</div>';
+                $th20    = '<div class="text-center">' . $row->update_status . '</div>';
+                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th8, $th9, $th10, $th11, $th12, $th13, $th14, $th15, $th16, $th17, $th18, $th19, $th20));
             }
             $dt['data'] = $data;
             echo json_encode($dt);
@@ -70,16 +72,17 @@ class Administrator extends CI_Controller
                 $th7    = '<div class="text-center">' . $row->end_date . '</div>';
                 $th9    = '<div class="text-center">' . $row->capex_budget . '</div>';
                 $th10    = '<div class="text-center">' . $row->capex_realization . '</div>';
-                $th11    = '<div class="text-center">' . $row->revenue_target . '</div>';
-                $th12    = '<div class="text-center">' . $row->revenue_realization . '</div>';
-                $th13    = '<div class="text-center">' . $row->status_name . '</div>';
-                $th14    = '<div class="text-center">' . $row->progress_project . '</div>';
-                $th15    = '<div class="text-center">' . $row->progress_fisik . '</div>';
-                $th16    = '<div class="text-center">' . $row->progress_kajian . '</div>';
-                $th17    = '<div class="text-center">' . $row->mitigation . '</div>';
-                $th18    = '<div class="text-center">' . $row->checklist . '</div>';
-                $th19    = '<div class="text-center">' . $row->update_status . '</div>';
-                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th9, $th10, $th11, $th12, $th13, $th14, $th15, $th16, $th17, $th18, $th19));
+                $th11    = '<div class="text-center">' . $row->contract_value . '</div>';
+                $th12    = '<div class="text-center">' . $row->revenue_target . '</div>';
+                $th13    = '<div class="text-center">' . $row->revenue_realization . '</div>';
+                $th14    = '<div class="text-center">' . $row->status_name . '</div>';
+                $th15    = '<div class="text-center">' . $row->progress_project . '</div>';
+                $th16    = '<div class="text-center">' . $row->progress_fisik . '</div>';
+                $th17    = '<div class="text-center">' . $row->progress_kajian . '</div>';
+                $th18    = '<div class="text-center">' . $row->mitigation . '</div>';
+                $th19    = '<div class="text-center">' . $row->checklist . '</div>';
+                $th20    = '<div class="text-center">' . $row->update_status . '</div>';
+                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th9, $th10, $th11, $th12, $th13, $th14, $th15, $th16, $th17, $th18, $th19, $th20));
             }
             $dt['data'] = $data;
             echo json_encode($dt);
@@ -92,6 +95,7 @@ class Administrator extends CI_Controller
             $this->form_validation->set_rules("end_date", "End Date", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("capex_budget", "Capex Budget", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("capex_realization", "Capex Realization", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("contract_value", "Contract Value", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("revenue_target", "Revenue target", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("revenue_realization", "Revenue Realization", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("progress_fisik", "Progress Fisik", "trim|required", array('required' => '{field} cannot be null !'));
@@ -112,6 +116,7 @@ class Administrator extends CI_Controller
                     'end_date'          => htmlspecialchars($this->input->post('end_date')),
                     'capex_budget'          => htmlspecialchars($this->input->post('capex_budget')),
                     'capex_realization'          => htmlspecialchars($this->input->post('capex_realization')),
+                    'contract_value'          => htmlspecialchars($this->input->post('contract_value')),
                     'revenue_target'          => htmlspecialchars($this->input->post('revenue_target')),
                     'revenue_realization'          => htmlspecialchars($this->input->post('revenue_realization')),
                     'progress_fisik'          => htmlspecialchars($this->input->post('progress_fisik')),
@@ -142,6 +147,7 @@ class Administrator extends CI_Controller
             $this->form_validation->set_rules("end_date", "End Date", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("capex_budget", "Capex Budget", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("capex_realization", "Capex Realization", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("contract_value", "Contract Value", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("revenue_target", "Revenue target", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("revenue_realization", "Revenue Realization", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("progress_fisik", "Progress Fisik", "trim|required", array('required' => '{field} cannot be null !'));
@@ -163,6 +169,7 @@ class Administrator extends CI_Controller
                     'end_date'          => htmlspecialchars($this->input->post('end_date')),
                     'capex_budget'          => htmlspecialchars($this->input->post('capex_budget')),
                     'capex_realization'          => htmlspecialchars($this->input->post('capex_realization')),
+                    'contract_value'          => htmlspecialchars($this->input->post('contract_value')),
                     'revenue_target'          => htmlspecialchars($this->input->post('revenue_target')),
                     'revenue_realization'          => htmlspecialchars($this->input->post('revenue_realization')),
                     'progress_kajian'          => htmlspecialchars($this->input->post('progress_kajian')),
