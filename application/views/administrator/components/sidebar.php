@@ -134,6 +134,16 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="<?php echo base_url('administrator/issueProblem') ?>" class="nav-link <?php if (isset($a_issueProblem)) {
+                                                                                                        echo $a_issueProblem;
+                                                                                                    } ?>">
+                        <i class="nav-icon fas fa-briefcase"></i>
+                        <p>
+                            Issue Problem
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="" class="nav-link">
                         <i class="nav-icon fas fa-power-off"></i>
                         <p>

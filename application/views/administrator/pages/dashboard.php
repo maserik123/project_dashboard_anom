@@ -3,20 +3,20 @@
         <!-- Info boxes -->
         <div class="row">
             <div class="col-md-12">
-                <h1>Dashboard</h1>
+                <h1>Dashboard <?php echo $yearNow; ?></h1>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-3 col-6">
                 <!-- small card -->
-                <div class="small-box bg-blue">
+                <div class="small-box bg-primary">
                     <div class="inner">
-                        <h3>150</h3>
+                        <h3><?php echo $projectActiveMore30Day['total']; ?></h3>
 
-                        <p>Active > 30 Days</p>
+                        <p>Active More 30 than Days</p>
                     </div>
                     <div class="icon">
-                        <i class="fas fa-shopping-cart"></i>
+                        <i class="fas fa-chart-bar"></i>
                     </div>
                     <a href="#" class="small-box-footer">
                         Project Totals
@@ -26,14 +26,14 @@
             <!-- ./col -->
             <div class="col-lg-3 col-6">
                 <!-- small card -->
-                <div class="small-box bg-blue">
+                <div class="small-box bg-green">
                     <div class="inner">
-                        <h3>53<sup style="font-size: 20px">%</sup></h3>
+                        <h3><?php echo $projectActiveMin30Day['total']; ?></h3>
 
-                        <p>Active < 30 Days</p>
+                        <p>Active Less than 30 Days</p>
                     </div>
                     <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
+                        <i class="fas fa-chart-line"></i>
                     </div>
                     <a href="#" class="small-box-footer">
                         Project Totals
@@ -43,14 +43,14 @@
             <!-- ./col -->
             <div class="col-lg-3 col-6">
                 <!-- small card -->
-                <div class="small-box bg-blue">
+                <div class="small-box bg-danger">
                     <div class="inner">
-                        <h3>44</h3>
+                        <h3><?php echo $projectActive2Week['total']; ?></h3>
 
                         <p>End in 2 Weeks</p>
                     </div>
                     <div class="icon">
-                        <i class="fas fa-user-plus"></i>
+                        <i class="fas fa-chart-line"></i>
                     </div>
                     <a href="#" class="small-box-footer">
                         Project Totals
@@ -60,9 +60,9 @@
             <!-- ./col -->
             <div class="col-lg-3 col-6">
                 <!-- small card -->
-                <div class="small-box bg-blue">
+                <div class="small-box bg-warning">
                     <div class="inner">
-                        <h3>65</h3>
+                        <h3><?php echo $projectActive1Week['total']; ?></h3>
 
                         <p>End in 1 Week</p>
                     </div>
@@ -76,84 +76,16 @@
             </div>
             <!-- ./col -->
         </div>
+
         <div class="row">
-            <div class="col-lg-3 col-6">
-                <!-- small card -->
-                <div class="small-box bg-red">
-                    <div class="inner">
-                        <h3>150</h3>
-
-                        <p>Completed 100%</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">
-                        Project Totals
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small card -->
-                <div class="small-box bg-red">
-                    <div class="inner">
-                        <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                        <p>Progress > 50%</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">
-                        Project Totals
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small card -->
-                <div class="small-box bg-red">
-                    <div class="inner">
-                        <h3>44</h3>
-
-                        <p>End in 2 Weeks</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-user-plus"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">
-                        Project Totals
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small card -->
-                <div class="small-box bg-red">
-                    <div class="inner">
-                        <h3>65</h3>
-
-                        <p>End in 1 Week</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-chart-pie"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">
-                        Project Totals
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-        </div>
-        <div class="row">
-            <div class="col-12 col-sm-6 col-md-2">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box bg-green">
 
                     <div class="info-box-content">
-                        <span class="info-box-text"><small>Projects Total <br>(Finished 100%)</small></span>
+                        <span class="info-box-text"><small><strong>Projects Total </strong>
+                                <br>(Finished 100%)</small></span>
                         <span class="info-box-number">
-                            2
+                            <?php echo $projectFinish100['total'] ?>
                             <small>Items</small>
                         </span>
                     </div>
@@ -161,13 +93,13 @@
                 </div>
                 <!-- /.info-box -->
             </div>
-            <div class="col-12 col-sm-6 col-md-2">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box bg-green">
 
                     <div class="info-box-content">
-                        <span class="info-box-text"><small>Projects Total <br> (Progress > 50%)</small></span>
+                        <span class="info-box-text"><small><strong>Projects Total</strong> <br> (Progress > 50%)</small></span>
                         <span class="info-box-number">
-                            2
+                            <?php echo $projectProgressMore50['total']; ?>
                             <small>Items</small>
                         </span>
                     </div>
@@ -176,13 +108,13 @@
                 <!-- /.info-box -->
             </div>
             <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-2">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box bg-green">
 
                     <div class="info-box-content">
-                        <span class="info-box-text"> <small>Projects Total <br> (Progress < 50%)</small></span>
+                        <span class="info-box-text"> <small><strong>Projects Total</strong> <br> (Progress < 50%)</small></span>
                         <span class="info-box-number">
-                            2
+                            <?php echo $projectProgressMin50['total']; ?>
                             <small>Items</small>
                         </span>
                     </div>
@@ -194,44 +126,23 @@
 
             <!-- fix for small devices only -->
             <div class="clearfix hidden-md-up"></div>
+            <?php foreach ($getCriteria as $row) {
+                $query = $this->db->query('SELECT COUNT(a.project_m_hdr_id) AS total FROM project_m_hdr a 
+                INNER JOIN master_project b ON b.master_project_id = a.master_project_id WHERE b.criteria_project_id ="' . $row->criteria_project_id . '" order by b.criteria_project_id asc')->row_array();
+            ?>
+                <div class="col-12 col-sm-6 col-md-2">
+                    <div class="info-box bg-red">
 
-            <div class="col-12 col-sm-6 col-md-2">
-                <div class="info-box bg-warning">
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">
-                            <small>Projects Total <br> Progress Kajian</small></span>
-                        <span class="info-box-number">50% <small>(3 Items)</small></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                <small> Progress <?php echo $row->criteria_project_name; ?></small></span>
+                            <span class="info-box-number"><small><?php echo $query['total'] ?></small></span>
+                        </div>
+                        <!-- /.info-box-content -->
                     </div>
-                    <!-- /.info-box-content -->
+                    <!-- /.info-box -->
                 </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-2">
-                <div class="info-box bg-warning">
-
-                    <div class="info-box-content">
-                        <span class="info-box-text"> <small> Projects Total <br> Progress Fisik</small></span>
-                        <span class="info-box-number">50% <small>(3 Items)</small></span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-
-            <div class="col-12 col-sm-6 col-md-2">
-                <div class="info-box bg-warning">
-
-                    <div class="info-box-content">
-                        <span class="info-box-text"> <small> Projects Total <br>Progress Kerjasama</small></span>
-                        <span class="info-box-number">50% <small>(3 Items)</small></span>
-
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
+            <?php } ?>
             <!-- /.col -->
         </div>
         <div class="row">
@@ -1134,10 +1045,37 @@
             </div>
             <!-- /.col -->
         </div>
-
-
-        <!-- /.row -->
-
-
+        <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+                    <h1>Hello world</h1>
+                </div>
+            </div>
+        </div>
     </div><!--/. container-fluid -->
 </section>
+
+<script>
+    function detail(id) {
+        save_method_role = 'update';
+        $('#formMasterProject')[0].reset();
+
+        //Load data dari ajax
+        $.ajax({
+            url: "<?php echo base_url('administrator/projectPICDetails/getById/'); ?>" + id,
+            type: "GET",
+            dataType: "JSON",
+            success: function(resp) {
+                data = resp.data
+                $('[name="pic_project_dtl_id"]').val(data.pic_project_dtl_id);
+                $('[name="pic_project_name"]').val(data.pic_project_name);
+                $('#modalMasterProject').modal('show');
+                $('.modal-title').text('Edit Data PIC Details');
+                // console.log(data.user_role_id);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error Get Data From Ajax');
+            }
+        });
+    }
+</script>

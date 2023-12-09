@@ -30,7 +30,8 @@
             "Model_ProjectPICHeader",
             "Model_ProjectPICDetails",
             "Model_ProjectStatus",
-            "Model_RiskMitigation"
+            "Model_RiskMitigation",
+            "Model_IssueProblem"
         ]
     }
 }

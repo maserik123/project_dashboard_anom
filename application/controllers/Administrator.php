@@ -10,7 +10,15 @@ class Administrator extends CI_Controller
         $view['title'] = 'Home Page';
         $view['pageName'] = 'dashboard';
         $view['a_dashboard'] = 'active';
-        $view['projectActiveMore30Day'] = $this->db->query("SELECT COUNT(*) FROM project_m_hdr WHERE DATEDIFF(end_date, CURRENT_DATE()) > 30");
+        $view['yearNow'] = date('Y');
+        $view['projectActiveMore30Day'] = $this->db->query("SELECT COUNT(*) as total FROM project_m_hdr WHERE DATEDIFF(end_date, CURRENT_DATE()) > 30 and year(update_date) = '" . date('Y') . "'")->row_array();
+        $view['projectActiveMin30Day'] = $this->db->query("SELECT COUNT(*) as total FROM project_m_hdr WHERE DATEDIFF(end_date, CURRENT_DATE()) < 30 and year(update_date) = '" . date('Y') . "'")->row_array();
+        $view['projectActive2Week'] = $this->db->query("SELECT COUNT(*)as total  FROM project_m_hdr WHERE DATEDIFF(end_date, CURRENT_DATE()) <= 14 and year(update_date) = '" . date('Y') . "'")->row_array();
+        $view['projectActive1Week'] = $this->db->query("SELECT COUNT(*) as total FROM project_m_hdr WHERE DATEDIFF(end_date, CURRENT_DATE()) <= 7 and year(update_date) = '" . date('Y') . "'")->row_array();
+        $view['projectFinish100'] = $this->db->query("(SELECT COUNT(*) as total FROM project_m_hdr a WHERE a.master_project_id = 10 AND (SELECT (SUM(progress)/COUNT(master_project_id)) AS progress FROM project_m_dtl WHERE master_project_id = a.master_project_id) = 100 and year(update_date) = '" . date('Y') . "')")->row_array();
+        $view['projectProgressMore50'] = $this->db->query("(SELECT COUNT(*) as total FROM project_m_hdr a WHERE a.master_project_id = 10 AND (SELECT (SUM(progress)/COUNT(master_project_id)) AS progress FROM project_m_dtl WHERE master_project_id = a.master_project_id) >= 50 and year(update_date) = '" . date('Y') . "' )")->row_array();
+        $view['projectProgressMin50'] = $this->db->query("(SELECT COUNT(*) as total FROM project_m_hdr a WHERE a.master_project_id = 10 AND (SELECT (SUM(progress)/COUNT(master_project_id)) AS progress FROM project_m_dtl WHERE master_project_id = a.master_project_id) <= 50 and year(update_date) = '" . date('Y') . "')")->row_array();
+        $view['getCriteria'] = $this->db->query("select * from criteria_project order by criteria_project_id asc")->result();
 
         $this->load->view('administrator/index', $view);
     }
@@ -888,6 +896,102 @@ class Administrator extends CI_Controller
             die;
         } else if ($param == 'delete') {
             $this->Model_ProjectInformation->delete($id);
+            $result = array('status' => 'success', 'msg' => 'Success Deleted !');
+            echo json_encode(array('result' => $result));
+            die;
+        }
+    }
+
+    function issueProblem($param = '', $id = '')
+    {
+        if (empty($param)) {
+            $view['title'] = 'ADMoni - Issue Problem';
+            $view['pageName'] = 'issueProblem';
+            $view['a_issueProblem'] = 'active';
+            $view['getMasterProject'] = $this->Model_ProjectMaster->getData();
+            $view['getPICDetail'] = $this->Model_ProjectPICDetails->getData();
+            $this->load->view('administrator/index', $view);
+        } else if ($param == 'getAllData') {
+            $dt = $this->Model_IssueProblem->getAllData();
+            $start = $this->input->post('start');
+            $data = array();
+            foreach ($dt['data'] as $row) {
+                $userid     = ($row->issue_problem_id);
+                $th1    = '<div class="text-center">' . ++$start . '</div>';
+                $th2    = '<div class="text-center">' . $row->project_name . '</div>';
+                $th3    = '<div class="text-center">' . $row->problem . '</div>';
+                $th4    = '<div class="text-center">' . $row->solution . '</div>';
+                $th5    = '<div class="text-center">' . $row->pic_project_name . '</div>';
+                $th6   = '<div class="text-center" style="width:100px;">' . (get_btn_group1('updateData(' . $userid . ')', 'deleteData(' . $userid . ')')) . '</div>';
+                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6));
+            }
+            $dt['data'] = $data;
+            echo json_encode($dt);
+            die;
+        } else if ($param == 'insert') {
+            $this->form_validation->set_rules("problem", "Problem", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("solution", "Solution", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("pic_project_dtl_id", "PIC Project", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("master_project_id", "Name Project", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_error_delimiters('<small id="text-error" style="color:red;">* ', '</small>');
+            if ($this->form_validation->run() == FALSE) {
+                $result = array('status' => 'error', 'msg' => 'Data is not right, please check again.');
+                foreach ($_POST as $key => $value) {
+                    $result['messages'][$key] = form_error($key);
+                }
+            } else {
+                $data = array(
+                    'problem'                   => htmlspecialchars($this->input->post('problem')),
+                    'solution'                  => htmlspecialchars($this->input->post('solution')),
+                    'pic_project_dtl_id'        => htmlspecialchars($this->input->post('pic_project_dtl_id')),
+                    'master_project_id'        => htmlspecialchars($this->input->post('master_project_id')),
+                );
+                $result['messages'] = '';
+                $result = array('status' => 'success', 'msg' => 'Data Inserted!');
+                $this->Model_IssueProblem->addData($data);
+            }
+
+            $csrf = array(
+                'token' => $this->security->get_csrf_hash()
+            );
+            echo json_encode(array('result' => $result, 'csrf' => $csrf));
+            die;
+        } else if ($param == 'getById') {
+            $data = $this->Model_IssueProblem->getById($id);
+            echo json_encode(array('data' => $data));
+            die;
+        } else if ($param == 'update') {
+            $this->form_validation->set_rules("problem", "Problem", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("solution", "Solution", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("pic_project_dtl_id", "PIC Project Name", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("master_project_id", "Name Project", "trim|required", array('required' => '{field} cannot be null !'));
+
+            $this->form_validation->set_error_delimiters('<small id="text-error" style="color:red;">*', '</small>');
+            if ($this->form_validation->run() == FALSE) {
+                $result = array('status' => 'error', 'msg' => 'Data yang anda isi belum benar !');
+                foreach ($_POST as $key => $value) {
+                    $result['messages'][$key] = form_error($key);
+                }
+            } else {
+                $aidi = $this->input->post('issue_problem_id');
+                $data = array(
+                    'problem'                   => htmlspecialchars($this->input->post('problem')),
+                    'solution'                  => htmlspecialchars($this->input->post('solution')),
+                    'pic_project_dtl_id'        => htmlspecialchars($this->input->post('pic_project_dtl_id')),
+                    'master_project_id'        => htmlspecialchars($this->input->post('master_project_id')),
+
+                );
+                $result['messages']    = '';
+                $result        = array('status' => 'success', 'msg' => 'Update Success !');
+                $this->Model_IssueProblem->update($aidi, $data);
+            }
+            $csrf = array(
+                'token' => $this->security->get_csrf_hash()
+            );
+            echo json_encode(array('result' => $result, 'csrf' => $csrf));
+            die;
+        } else if ($param == 'delete') {
+            $this->Model_IssueProblem->delete($id);
             $result = array('status' => 'success', 'msg' => 'Success Deleted !');
             echo json_encode(array('result' => $result));
             die;

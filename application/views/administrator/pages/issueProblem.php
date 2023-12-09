@@ -14,7 +14,7 @@
             "responsive": true,
             "dataType": 'JSON',
             "ajax": {
-                "url": "<?php echo site_url('administrator/projectMaster/getAllData') ?>",
+                "url": "<?php echo site_url('administrator/issueProblem/getAllData') ?>",
                 "type": "POST",
                 "data": {
                     '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>'
@@ -39,7 +39,7 @@
 
     function add() {
         save_method_role = 'add';
-        $('.modal-title').text(' Add Data Projects');
+        $('.modal-title').text(' Add Data Issue Problem');
         $('.reset-btn').show();
         $('.form-group')
             .removeClass('has-error')
@@ -60,17 +60,18 @@
 
         //Load data dari ajax
         $.ajax({
-            url: "<?php echo base_url('administrator/projectMaster/getById/'); ?>" + id,
+            url: "<?php echo base_url('administrator/issueProblem/getById/'); ?>" + id,
             type: "GET",
             dataType: "JSON",
             success: function(resp) {
                 data = resp.data
+                $('[name="issue_problem_id"]').val(data.issue_problem_id);
+                $('[name="problem"]').val(data.problem);
+                $('[name="solution"]').val(data.solution);
+                $('[name="pic_project_dtl_id"]').val(data.pic_project_dtl_id);
                 $('[name="master_project_id"]').val(data.master_project_id);
-                $('[name="project_name"]').val(data.project_name);
-                $('[name="criteria_project_id"]').val(data.criteria_project_id);
-                $('[name="project_description"]').val(data.project_description);
                 $('#modalMasterProject').modal('show');
-                $('.modal-title').text('Edit Data Master Project');
+                $('.modal-title').text('Edit Data Issue Problem');
                 // console.log(data.user_role_id);
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -96,7 +97,7 @@
         }).then((result) => {
             if (result == true) {
                 $.ajax({
-                    url: "<?php echo site_url('administrator/projectMaster/delete'); ?>/" + id,
+                    url: "<?php echo site_url('administrator/issueProblem/delete'); ?>/" + id,
                     type: "POST",
                     data: {
                         '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>'
@@ -135,9 +136,9 @@
     function save() {
         var url;
         if (save_method_role == 'add') {
-            url = '<?php echo base_url() ?>administrator/projectMaster/insert';
+            url = '<?php echo base_url() ?>administrator/issueProblem/insert';
         } else {
-            url = '<?php echo base_url() ?>administrator/projectMaster/update';
+            url = '<?php echo base_url() ?>administrator/issueProblem/update';
         }
 
         swal({
@@ -213,7 +214,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Master Project List</h3>
+                        <h3 class="card-title">Issue Problem List</h3>
                         <div class="text-right">
                             <button onclick="add()" class="btn btn-primary btn-sm">
                                 <li class="fas fa-plus"></li> Add Data
@@ -227,8 +228,8 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Project Name</th>
-                                    <th>Type/Criteria Project Name</th>
-                                    <th>Project Description</th>
+                                    <th>Problem</th>
+                                    <th>Solution</th>
                                     <th>Tools</th>
                                 </tr>
                             </thead>
@@ -252,31 +253,43 @@
             </div>
             <form class="form-horizontal" id="formMasterProject" action="" method="POST">
                 <div class="modal-body">
-                    <input type="hidden" name='master_project_id' value="" id='master_project_id'>
+                    <input type="hidden" name='issue_problem_id' value="" id='issue_problem_id'>
                     <div class="item form-group">
-                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Project Name <span class="required">*</span>
+                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Project Name<span class="required">*</span>
                         </label>
                         <div class="col-md-12 col-sm-9 col-xs-12">
-                            <input type="text" id="project_name" name="project_name" placeholder="Project Name" required="required" class="form-control ">
-                        </div>
-                    </div>
-                    <div class="item form-group">
-                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Criteria/Type Project <span class="required">*</span>
-                        </label>
-                        <div class="col-md-12 col-sm-9 col-xs-12">
-                            <select name="criteria_project_id" id="criteria_project_id" class="form-control">
-                                <option value="">Select Criteria Project</option>
-                                <?php foreach ($getAllCriteria as $row) { ?>
-                                    <option value="<?php echo $row->criteria_project_id;  ?>"><?php echo $row->criteria_project_name; ?></option>
+                            <select name="master_project_id" id="master_project_id" class="form-control">
+                                <option value="">Select Project</option>
+                                <?php foreach ($getMasterProject as $row) { ?>
+                                    <option value="<?php echo $row->master_project_id ?>"><?php echo $row->project_name; ?></option>
                                 <?php } ?>
                             </select>
                         </div>
                     </div>
                     <div class="item form-group">
-                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Description Project <span class="required">*</span>
+                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Problem <span class="required">*</span>
                         </label>
                         <div class="col-md-12 col-sm-9 col-xs-12">
-                            <textarea name="project_description" id="project_description" class="form-control" cols="30" rows="5"></textarea>
+                            <input type="text" id="problem" name="problem" placeholder="Problem" required="required" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Solution<span class="required">*</span>
+                        </label>
+                        <div class="col-md-12 col-sm-9 col-xs-12">
+                            <input type="text" id="solution" name="solution" placeholder="Solution" required="required" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-12 col-sm-3 col-xs-12">PIC Project<span class="required">*</span>
+                        </label>
+                        <div class="col-md-12 col-sm-9 col-xs-12">
+                            <select name="pic_project_dtl_id" id="pic_project_dtl_id" class="form-control">
+                                <option value="">Select PIC</option>
+                                <?php foreach ($getPICDetail as $row) { ?>
+                                    <option value="<?php echo $row->pic_project_dtl_id ?>"><?php echo $row->pic_project_name ?></option>
+                                <?php } ?>
+                            </select>
                         </div>
                     </div>
                 </div>
