@@ -23,6 +23,14 @@ class Administrator extends CI_Controller
         $this->load->view('administrator/index', $view);
     }
 
+    function dashboard_detail($project_id = '')
+    {
+        $view['title'] = 'Home Page';
+        $view['pageName'] = 'Detail Dashboard';
+        $view['project_id'] = $project_id;
+        $this->load->view('administrator/pages/dashboard_detail', $view);
+    }
+
     function projectHeader($param = '', $id = '')
     {
         if (empty($param)) {
@@ -72,7 +80,7 @@ class Administrator extends CI_Controller
             foreach ($dt['data'] as $row) {
                 $userid     = ($row->project_m_hdr_id);
                 $th1    = '<div class="text-center">' . ++$start . '</div>';
-                $th2   = '<div class="text-center" style="width:100px;">' . (get_btn_detail('updateData(' . $userid . ')')) . '</div>';
+                $th2   = '<div class="text-center" style="width:100px;">' . (get_btn_detail('detail_dashboard(' . $userid . ')')) . '</div>';
                 $th3    = '<div class="text-center">' . $row->project_name . '</div>';
                 $th4    = '<div class="text-center">' . $row->pic_project_name . '</div>';
                 $th5    = '<div class="text-center">' . $row->criteria_project_name . '</div>';

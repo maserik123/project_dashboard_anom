@@ -1,11 +1,7 @@
 <section class="content">
     <div class="container-fluid">
         <!-- Info boxes -->
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Dashboard <?php echo $yearNow; ?></h1>
-            </div>
-        </div>
+
         <div class="row">
             <div class="col-lg-3 col-6">
                 <!-- small card -->
@@ -1045,37 +1041,12 @@
             </div>
             <!-- /.col -->
         </div>
-        <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-md" role="document">
-                <div class="modal-content">
-                    <h1>Hello world</h1>
-                </div>
-            </div>
-        </div>
+
     </div><!--/. container-fluid -->
 </section>
 
 <script>
-    function detail(id) {
-        save_method_role = 'update';
-        $('#formMasterProject')[0].reset();
-
-        //Load data dari ajax
-        $.ajax({
-            url: "<?php echo base_url('administrator/projectPICDetails/getById/'); ?>" + id,
-            type: "GET",
-            dataType: "JSON",
-            success: function(resp) {
-                data = resp.data
-                $('[name="pic_project_dtl_id"]').val(data.pic_project_dtl_id);
-                $('[name="pic_project_name"]').val(data.pic_project_name);
-                $('#modalMasterProject').modal('show');
-                $('.modal-title').text('Edit Data PIC Details');
-                // console.log(data.user_role_id);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error Get Data From Ajax');
-            }
-        });
+    function detail_dashboard(project_id) {
+        window.open('<?php echo base_url("administrator/dashboard_detail/"); ?>' + project_id, '_blank');
     }
 </script>

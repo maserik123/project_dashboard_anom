@@ -43,7 +43,7 @@ function get_btn_edit($btn_edit)
 }
 function get_btn_detail($btn_delete)
 {
-    $li_btn_delete    = '<button class="btn btn-xs btn-primary" title="Delete Data" onClick=' . $btn_delete . '><li class="fa fa-search"></li></button>';
+    $li_btn_delete    = '<button class="btn btn-xs btn-primary"  title="Detail Data" onClick=' . $btn_delete . '><li class="fa fa-search"></li></button>';
     return '<div class="text-center">' . $li_btn_delete . '</div>';
 }
 
