@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 10, 2023 at 08:22 PM
+-- Generation Time: Dec 10, 2023 at 09:43 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.1.17
 
@@ -289,6 +289,116 @@ INSERT INTO `risk_mitigation` (`risk_mitigation_id`, `master_project_id`, `risk_
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `userid` int(11) NOT NULL,
+  `full_name` varchar(115) NOT NULL,
+  `nick_name` varchar(115) NOT NULL,
+  `initial` text NOT NULL,
+  `NIP` text NOT NULL,
+  `email` varchar(115) NOT NULL,
+  `address` text NOT NULL,
+  `phone_number` varchar(50) NOT NULL,
+  `picture` text NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`userid`, `full_name`, `nick_name`, `initial`, `NIP`, `email`, `address`, `phone_number`, `picture`, `create_date`) VALUES
+(4, 'abg', 'ABG', 'FAR', '20017861', 'haha@gmail.com', 'medan pekanbaru', '082233445566', '', '2023-12-03 17:40:07'),
+(5, 'Benget Manahan Siregar', 'Benget', 'BMS', '20088334', 'benget@globalnet.lcl', 'Serapung', '09334455666', '', '2022-07-30 04:45:48'),
+(6, 'Samsul Rizal', 'Sam', 'SRZ', '23344551', 'samsul@kerinci.lcl', 'medan', '08233445566', '', '2022-07-30 04:46:02'),
+(7, 'User1', 'user satu', 'U1', '12345', 'asdf@gmail.com', 'Indonesia', '09334455666', '', '2023-12-03 17:40:19'),
+(8, 'test', 'test', 'DF', '223424', 'rrr@gnnn.mm', '', '', '', '2023-12-03 18:01:01'),
+(9, 'Agung', '', '', '', 'agung@gmail.com', '', '083455663355', '', '2023-12-03 18:25:35'),
+(10, 'rianda', '', '', '', 'rianda@gmail.com', '', '08123345533', '', '2023-12-03 18:27:06'),
+(11, 'rianda', '', '', '', 'rianda@gmail.com', '', '08123345533', '', '2023-12-03 18:27:30'),
+(12, 'jihan', '', '', '', 'jihan@gmail.com', '', '083944554423', '', '2023-12-03 18:29:09'),
+(13, 'ayam', '', '', '', 'ayam@gmail.com', '', '082332323232', '', '2023-12-03 18:31:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_log`
+--
+
+CREATE TABLE `user_log` (
+  `user_log_id` int(11) NOT NULL,
+  `ip_address` varchar(50) NOT NULL,
+  `jenis_aksi` varchar(50) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `tanggal` date NOT NULL,
+  `userid` int(11) NOT NULL,
+  `keterangan` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_login`
+--
+
+CREATE TABLE `user_login` (
+  `user_login_id` int(11) NOT NULL,
+  `oauth_provider` varchar(15) NOT NULL,
+  `oauth_uid` varchar(50) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `username` varchar(115) NOT NULL,
+  `password` varchar(115) NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `user_role_id` int(11) NOT NULL,
+  `block_status` varchar(15) NOT NULL,
+  `access_status` varchar(15) NOT NULL,
+  `online_status` varchar(12) DEFAULT NULL,
+  `time_online` timestamp NULL DEFAULT NULL,
+  `time_offline` timestamp NULL DEFAULT NULL,
+  `create_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_login`
+--
+
+INSERT INTO `user_login` (`user_login_id`, `oauth_provider`, `oauth_uid`, `userid`, `username`, `password`, `link`, `user_role_id`, `block_status`, `access_status`, `online_status`, `time_online`, `time_offline`, `create_date`) VALUES
+(4, '', '', 4, 'penyewa', '5ebe2294ecd0e0f08eab7690d2a6ee69', '', 7, '0', '', 'offline', '2023-12-03 18:58:41', NULL, '2023-12-03 18:58:41'),
+(7, '', '', 6, 'peminjam', '5ebe2294ecd0e0f08eab7690d2a6ee69', '', 9, '0', '', 'online', '2023-12-03 18:59:04', NULL, '2023-12-03 18:59:04'),
+(8, '', '', 5, 'administrator', '5ebe2294ecd0e0f08eab7690d2a6ee69', '', 10, '0', '', 'online', '2023-12-10 20:43:11', NULL, '2023-12-10 20:43:11'),
+(9, '', '', 8, 'agung123', '6f5d0ad4bc971cddc51a0c5f74bdf3fd', '', 7, '', '', 'offline', '2023-12-03 18:26:34', NULL, '2023-12-03 18:26:34'),
+(10, '', '', 9, 'rianda', '5ebe2294ecd0e0f08eab7690d2a6ee69', '', 9, '', '', NULL, NULL, NULL, '2023-12-03 18:27:06'),
+(11, '', '', 10, 'rianda', '5ebe2294ecd0e0f08eab7690d2a6ee69', '', 9, '', '', NULL, NULL, NULL, '2023-12-03 18:27:30'),
+(12, '', '', 11, 'jihan123', '5ebe2294ecd0e0f08eab7690d2a6ee69', '', 10, '', '', NULL, NULL, NULL, '2023-12-03 18:29:10'),
+(13, '', '', 12, 'ayam123', '5ebe2294ecd0e0f08eab7690d2a6ee69', '', 7, '', '', 'offline', '2023-12-03 18:34:44', NULL, '2023-12-03 18:34:44');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_role`
+--
+
+CREATE TABLE `user_role` (
+  `user_role_id` int(11) NOT NULL,
+  `role` text NOT NULL,
+  `description` text NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_role`
+--
+
+INSERT INTO `user_role` (`user_role_id`, `role`, `description`, `create_date`) VALUES
+(7, 'penyewa', 'Yang menyewakan laptop', '2023-12-03 17:12:45'),
+(9, 'peminjam', 'Yang meminjam laptop', '2023-12-03 17:12:55'),
+(10, 'admin', 'yang mengapprove', '2023-12-03 17:13:04');
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `v_project_m_dtl`
 -- (See below for the actual view)
 --
@@ -414,6 +524,30 @@ ALTER TABLE `risk_mitigation`
   ADD PRIMARY KEY (`risk_mitigation_id`);
 
 --
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`userid`);
+
+--
+-- Indexes for table `user_log`
+--
+ALTER TABLE `user_log`
+  ADD PRIMARY KEY (`user_log_id`);
+
+--
+-- Indexes for table `user_login`
+--
+ALTER TABLE `user_login`
+  ADD PRIMARY KEY (`user_login_id`);
+
+--
+-- Indexes for table `user_role`
+--
+ALTER TABLE `user_role`
+  ADD PRIMARY KEY (`user_role_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -476,6 +610,30 @@ ALTER TABLE `project_status`
 --
 ALTER TABLE `risk_mitigation`
   MODIFY `risk_mitigation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `user_log`
+--
+ALTER TABLE `user_log`
+  MODIFY `user_log_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user_login`
+--
+ALTER TABLE `user_login`
+  MODIFY `user_login_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `user_role`
+--
+ALTER TABLE `user_role`
+  MODIFY `user_role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

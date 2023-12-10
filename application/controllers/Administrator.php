@@ -7,20 +7,25 @@ class Administrator extends CI_Controller
 
     public function index()
     {
-        $view['title'] = 'Home Page';
-        $view['pageName'] = 'dashboard';
-        $view['a_dashboard'] = 'active';
-        $view['yearNow'] = date('Y');
-        $view['projectActiveMore30Day'] = $this->db->query("SELECT COUNT(*) as total FROM project_m_hdr WHERE DATEDIFF(end_date, CURRENT_DATE()) > 30 and year(update_date) = '" . date('Y') . "'")->row_array();
-        $view['projectActiveMin30Day'] = $this->db->query("SELECT COUNT(*) as total FROM project_m_hdr WHERE DATEDIFF(end_date, CURRENT_DATE()) < 30 and year(update_date) = '" . date('Y') . "'")->row_array();
-        $view['projectActive2Week'] = $this->db->query("SELECT COUNT(*)as total  FROM project_m_hdr WHERE DATEDIFF(end_date, CURRENT_DATE()) <= 14 and year(update_date) = '" . date('Y') . "'")->row_array();
-        $view['projectActive1Week'] = $this->db->query("SELECT COUNT(*) as total FROM project_m_hdr WHERE DATEDIFF(end_date, CURRENT_DATE()) <= 7 and year(update_date) = '" . date('Y') . "'")->row_array();
-        $view['projectFinish100'] = $this->db->query("(SELECT COUNT(*) as total FROM project_m_hdr a WHERE a.master_project_id = 10 AND (SELECT (SUM(progress)/COUNT(master_project_id)) AS progress FROM project_m_dtl WHERE master_project_id = a.master_project_id) = 100 and year(update_date) = '" . date('Y') . "')")->row_array();
-        $view['projectProgressMore50'] = $this->db->query("(SELECT COUNT(*) as total FROM project_m_hdr a WHERE a.master_project_id = 10 AND (SELECT (SUM(progress)/COUNT(master_project_id)) AS progress FROM project_m_dtl WHERE master_project_id = a.master_project_id) >= 50 and year(update_date) = '" . date('Y') . "' )")->row_array();
-        $view['projectProgressMin50'] = $this->db->query("(SELECT COUNT(*) as total FROM project_m_hdr a WHERE a.master_project_id = 10 AND (SELECT (SUM(progress)/COUNT(master_project_id)) AS progress FROM project_m_dtl WHERE master_project_id = a.master_project_id) <= 50 and year(update_date) = '" . date('Y') . "')")->row_array();
-        $view['getCriteria'] = $this->db->query("select * from criteria_project order by criteria_project_id asc")->result();
+        if (!$this->session->userdata('loggedIn')) {
+            $this->session->set_flashdata('result_login', 'Silahkan Log in untuk mengakses sistem !');
+            redirect('/auth/');
+        } else {
+            $view['title'] = 'Home Page';
+            $view['pageName'] = 'dashboard';
+            $view['a_dashboard'] = 'active';
+            $view['yearNow'] = date('Y');
+            $view['projectActiveMore30Day'] = $this->db->query("SELECT COUNT(*) as total FROM project_m_hdr WHERE DATEDIFF(end_date, CURRENT_DATE()) > 30 and year(update_date) = '" . date('Y') . "'")->row_array();
+            $view['projectActiveMin30Day'] = $this->db->query("SELECT COUNT(*) as total FROM project_m_hdr WHERE DATEDIFF(end_date, CURRENT_DATE()) < 30 and year(update_date) = '" . date('Y') . "'")->row_array();
+            $view['projectActive2Week'] = $this->db->query("SELECT COUNT(*)as total  FROM project_m_hdr WHERE DATEDIFF(end_date, CURRENT_DATE()) <= 14 and year(update_date) = '" . date('Y') . "'")->row_array();
+            $view['projectActive1Week'] = $this->db->query("SELECT COUNT(*) as total FROM project_m_hdr WHERE DATEDIFF(end_date, CURRENT_DATE()) <= 7 and year(update_date) = '" . date('Y') . "'")->row_array();
+            $view['projectFinish100'] = $this->db->query("(SELECT COUNT(*) as total FROM project_m_hdr a WHERE a.master_project_id = 10 AND (SELECT (SUM(progress)/COUNT(master_project_id)) AS progress FROM project_m_dtl WHERE master_project_id = a.master_project_id) = 100 and year(update_date) = '" . date('Y') . "')")->row_array();
+            $view['projectProgressMore50'] = $this->db->query("(SELECT COUNT(*) as total FROM project_m_hdr a WHERE a.master_project_id = 10 AND (SELECT (SUM(progress)/COUNT(master_project_id)) AS progress FROM project_m_dtl WHERE master_project_id = a.master_project_id) >= 50 and year(update_date) = '" . date('Y') . "' )")->row_array();
+            $view['projectProgressMin50'] = $this->db->query("(SELECT COUNT(*) as total FROM project_m_hdr a WHERE a.master_project_id = 10 AND (SELECT (SUM(progress)/COUNT(master_project_id)) AS progress FROM project_m_dtl WHERE master_project_id = a.master_project_id) <= 50 and year(update_date) = '" . date('Y') . "')")->row_array();
+            $view['getCriteria'] = $this->db->query("select * from criteria_project order by criteria_project_id asc")->result();
 
-        $this->load->view('administrator/index', $view);
+            $this->load->view('administrator/index', $view);
+        }
     }
 
     function dashboard_detail($project_id = '')

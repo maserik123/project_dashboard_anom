@@ -13,7 +13,52 @@
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
-
+        <script type="text/javascript">
+            function logout() {
+                swal({
+                    title: "Apakah anda sudah yakin ?",
+                    icon: "warning",
+                    buttons: {
+                        cancel: true,
+                        confirm: true,
+                    },
+                }).then((result) => {
+                    if (result == true) {
+                        $.ajax({
+                            url: "<?php echo site_url('auth/logout'); ?>",
+                            type: "POST",
+                            dataType: "JSON",
+                            data: {
+                                '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>'
+                            },
+                            success: function(data) {
+                                $url = '<?php echo base_url('/auth/') ?>';
+                                setTimeout(() => {
+                                    $(location).attr('href', $url)
+                                }, 1400);
+                                return swal({
+                                    html: true,
+                                    timer: 1300,
+                                    showConfirmButton: false,
+                                    title: data['msg'],
+                                    icon: data['status']
+                                });
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                alert('Error to Log out, check the connection or configuration !');
+                            }
+                        });
+                    } else {
+                        return swal({
+                            title: 'Transaksi telah dibatalkan !',
+                            content: true,
+                            timer: 1300,
+                            icon: 'warning'
+                        });
+                    }
+                });
+            }
+        </script>
         <!-- Preloader -->
         <!-- <div class="preloader flex-column justify-content-center align-items-center">
             <img class="animation__wobble" src="<?php echo base_url('assets/') ?>dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">

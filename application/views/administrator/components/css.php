@@ -19,6 +19,9 @@
  <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
  <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
  <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+ <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+ <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+ <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 
  <!-- DataTables  & Plugins -->
  <script src="<?php echo base_url('assets') ?>/plugins/datatables/jquery.dataTables.min.js"></script>

@@ -19,7 +19,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-widget="control-sidebar" title="Logout !" href="#" role="button">
+            <a class="nav-link" data-widget="control-sidebar" title="Logout !" href="#" onclick="logout()" role="button">
                 <i class="fas fa-power-off"></i>
             </a>
         </li>

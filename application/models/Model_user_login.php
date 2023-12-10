@@ -65,6 +65,7 @@ class Model_user_login extends CI_Model
         b.full_name,
         b.nick_name,
         b.initial,
+        b.userid,
         b.NIP,
         b.email,
         b.address,

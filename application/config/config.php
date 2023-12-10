@@ -41,7 +41,7 @@ $config['base_url'] = $json['general']['base_url'];
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------
