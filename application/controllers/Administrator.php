@@ -754,7 +754,7 @@ class Administrator extends CI_Controller
                 $th2    = '<div class="text-center">' . $row->project_name . '</div>';
                 $th3    = '<div class="text-center">' . $row->risk_profile . '</div>';
                 $th4    = '<div class="text-center">' . $row->mitigation . '</div>';
-                $th5    = '<div class="text-center">' . $row->checklist . '</div>';
+                $th5    =  $row->checklist == 1 ? "<li class='far fa-check-circle'></li>" : ($row->checklist == 0 ? "<li class='fas fa-times'></li>" : "");
                 $th6   = '<div class="text-center" style="width:100px;">' . (get_btn_group1('updateData(' . $userid . ')', 'deleteData(' . $userid . ')')) . '</div>';
                 $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6));
             }

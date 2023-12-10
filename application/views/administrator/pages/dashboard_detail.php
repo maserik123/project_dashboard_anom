@@ -39,7 +39,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <?php $query = $this->db->query('select *, (SELECT DATEDIFF(end_date, start_date) / 30.436875) as duration from project_m_hdr where project_m_hdr_id ="' . $project_id . '"')->row_array(); ?>
+                            <?php $query = $this->db->query('select a.*, 
+                            (SELECT (SUM(progress)/COUNT(master_project_id)) AS progress FROM project_m_dtl WHERE master_project_id = a.master_project_id) as progress_project,
+                            (SELECT DATEDIFF(a.end_date, a.start_date) / 30.436875) as duration from project_m_hdr a where a.project_m_hdr_id ="' . $project_id . '"')->row_array(); ?>
                             <?php $getProject = $this->db->query('select project_name, project_description from master_project where master_project_id = "' . $query['master_project_id'] . '"')->row_array(); ?>
                             <?php $getDetailProject = $this->db->query('select b.* from master_project a inner join criteria_project b on b.criteria_project_id = a.criteria_project_id')->row_array(); ?>
                             <?php $getPICDetail = $this->db->query('select b.pic_project_name from project_m_hdr a inner join pic_project_hdr b on b.pic_project_hdr_id = a.pic_project_hdr_id where a.project_m_hdr_id ="' . $project_id . '"')->row_array(); ?>
@@ -75,7 +77,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <!-- small card -->
                                         <div class="small-box bg-primary">
                                             <div class="inner">
-                                                <h3>50%</h3>
+                                                <h3><?php echo $query['progress_project'] ?>%</h3>
 
                                                 <p>Progress Totals</p>
                                             </div>
@@ -88,7 +90,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <!-- small card -->
                                         <div class="small-box bg-danger">
                                             <div class="inner">
-                                                <h3>50%</h3>
+                                                <h3><?php echo $query['progress_kajian'] ?>%</h3>
 
                                                 <p>Progress Kajian</p>
                                             </div>
@@ -127,6 +129,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <td><?php echo tgl_indo($query['duration']); ?> Months</td>
                                         </tr>
 
+                                    </table>
+                                </div>
+                            </div><!-- /.card -->
+                            <div class="card card-primary card-outline">
+                                <div class="card-body">
+                                    <h5 class="card-title">Target Revenue</h5>
+                                    <table class="table table-responsive">
+                                        <tr>
+                                            <th>
+                                                Revenue Target
+                                            </th>
+                                            <td><?php echo rupiah_format($query['revenue_target']); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                Revenue Realization
+                                            </th>
+                                            <td><?php echo rupiah_format($query['revenue_realization']); ?></td>
+                                        </tr>
                                     </table>
                                 </div>
                             </div><!-- /.card -->
@@ -180,7 +201,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                         <th>
                                                             Contract Value
                                                         </th>
-                                                        <td><?php echo $row->contract_price; ?></td>
+                                                        <td><?php echo rupiah_format($row->contract_price); ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th>
@@ -192,7 +213,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                         <th>
                                                             Payed
                                                         </th>
-                                                        <td><?php echo $row->payed; ?></td>
+                                                        <td><?php echo rupiah_format($row->payed); ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th>
@@ -214,6 +235,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                             Mitra/Calon Mitra <?php echo ++$no; ?>
                                                         </th>
                                                         <td><?php echo $row->consultant_name; ?></td>
+                                                        <td><?php echo $row->waktu_konsultan_mitra; ?></td>
                                                     </tr>
 
                                                 <?php } ?>
@@ -224,6 +246,115 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </div>
                         </div>
                         <!-- /.col-md-6 -->
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Risk Mitigation </h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table id="projectMaster" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Risk Profile</th>
+                                                <th>Mitigation</th>
+                                                <th>Checklist</th>
+                                            </tr>
+                                        </thead>
+                                        <?php $qu = $this->db->query('select * from risk_mitigation where master_project_id ="' . $query['master_project_id'] . '"')->result(); ?>
+                                        <tbody>
+                                            <?php $no = 0;
+                                            foreach ($qu as $row) { ?>
+                                                <tr>
+                                                    <td><?php echo ++$no; ?></td>
+                                                    <td><?php echo $row->risk_profile; ?></td>
+                                                    <td><?php echo $row->mitigation; ?></td>
+                                                    <td><?php echo $row->checklist; ?></td>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Issue/Problems </h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table id="projectMaster" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Issue/Problems/Arahan Direksi</th>
+                                                <th>Tindak Lanjut</th>
+                                                <th>PIC</th>
+                                            </tr>
+                                        </thead>
+                                        <?php $qu = $this->db->query('select * from issue_problem a inner join pic_project_dtl b on b.pic_project_dtl_id = a.pic_project_dtl_id where a.master_project_id = ' . $query['master_project_id'])->result(); ?>
+                                        <tbody>
+                                            <?php $no = 0;
+                                            foreach ($qu as $row) { ?>
+                                                <tr>
+                                                    <td><?php echo ++$no; ?></td>
+                                                    <td><?php echo $row->problem; ?></td>
+                                                    <td><?php echo $row->solution; ?></td>
+                                                    <td><?php echo $row->pic_project_name; ?></td>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Project Details List</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table id="projectMaster" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Project Name</th>
+                                                <th>Project activity</th>
+                                                <th>PIC Project Name</th>
+                                                <th>Date Line</th>
+                                                <th>Progress</th>
+                                                <th>Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <?php $qu = $this->db->query('select project_m_dtl_id, project_name, project_activity, pic_project_name, dateline, progress, ket from v_project_m_dtl order by project_m_dtl_id desc')->result(); ?>
+                                        <tbody>
+                                            <?php $no = 0;
+                                            foreach ($qu as $row) { ?>
+                                                <tr>
+                                                    <td><?php echo ++$no; ?></td>
+                                                    <td><?php echo $row->project_name; ?></td>
+                                                    <td><?php echo $row->project_activity; ?></td>
+                                                    <td><?php echo $row->pic_project_name; ?></td>
+                                                    <td><?php echo $row->dateline; ?></td>
+                                                    <td><?php echo $row->progress; ?></td>
+                                                    <td><?php echo $row->ket; ?></td>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
                     </div>
                     <!-- /.row -->
                 </div><!-- /.container-fluid -->

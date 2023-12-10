@@ -287,8 +287,11 @@
                         <label class="control-label col-md-12 col-sm-3 col-xs-12">Checklist<span class="required">*</span>
                         </label>
                         <div class="col-md-12 col-sm-9 col-xs-12">
-                            <input type="text" name='checklist' class="form-control" value="" id='checklist'>
-
+                            <select name="checklist" id="checklist" class="form-control">
+                                <option value="">Select Checklist</option>
+                                <option value="1">Checklist</option>
+                                <option value="0">Not Checklist</option>
+                            </select>
                         </div>
                     </div>
                 </div>
