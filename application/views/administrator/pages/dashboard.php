@@ -237,9 +237,11 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-sm-3 col-6">
+                                <?php $q_rev = $this->db->query('SELECT SUM(revenue_realization) AS actual_tot, SUM(revenue_target) AS plan_tot FROM project_m_hdr')->row_array(); ?>
+                                <?php $q_cost_capex = $this->db->query('SELECT SUM(capex_realization) AS actual_tot, SUM(capex_budget) AS plan_tot FROM project_m_hdr')->row_array(); ?>
                                 <div class="description-block border-right">
-                                    <span class="description-percentage text-success"> Actual : Rp 50.000</span>
-                                    <h5 class="description-header">Plan : Rp 200.000</h5>
+                                    <span class="description-percentage text-success"> Actual : <?php echo rupiah_format($q_rev['actual_tot']); ?></span>
+                                    <h5 class="description-header">Plan : <?php echo rupiah_format($q_rev['plan_tot']); ?></h5>
                                     <span class="description-text">TOTAL REVENUE (Rp. Juta)</span>
                                 </div>
                                 <!-- /.description-block -->
@@ -247,8 +249,8 @@
                             <!-- /.col -->
                             <div class="col-sm-3 col-6">
                                 <div class="description-block border-right">
-                                    <span class="description-percentage text-warning"> Actual : Rp 50.000</span>
-                                    <h5 class="description-header">Plan : Rp 200.000</h5>
+                                    <span class="description-percentage text-warning"> Actual : <?php echo rupiah_format($q_cost_capex['actual_tot']); ?></span>
+                                    <h5 class="description-header">Plan : <?php echo rupiah_format($q_cost_capex['plan_tot']); ?></h5>
                                     <span class="description-text">TOTAL COST (Rp. Juta)</span>
                                 </div>
                                 <!-- /.description-block -->

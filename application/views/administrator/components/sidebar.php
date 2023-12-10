@@ -112,17 +112,17 @@
                                 <p>Projects Status</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="<?php echo base_url('administrator/riskMitigation'); ?>" class="nav-link <?php if (isset($a_riskMitigation)) {
-                                                                                                                    echo $a_riskMitigation;
-                                                                                                                } ?>">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Risk Mitigation</p>
-                            </a>
-                        </li>
+
                     </ul>
                 </li>
-
+                <li class="nav-item">
+                    <a href="<?php echo base_url('administrator/riskMitigation'); ?>" class="nav-link <?php if (isset($a_riskMitigation)) {
+                                                                                                            echo $a_riskMitigation;
+                                                                                                        } ?>">
+                        <i class="nav-icon fas fa-list"></i>
+                        <p>Risk Mitigation</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="<?php echo base_url('administrator/projectInformation') ?>" class="nav-link <?php if (isset($a_projectInformation)) {
                                                                                                                 echo $a_projectInformation;

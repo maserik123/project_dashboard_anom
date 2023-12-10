@@ -272,7 +272,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                     <td><?php echo ++$no; ?></td>
                                                     <td><?php echo $row->risk_profile; ?></td>
                                                     <td><?php echo $row->mitigation; ?></td>
-                                                    <td><?php echo $row->checklist; ?></td>
+                                                    <td><?php echo $row->checklist == 1 ? "<li class='far fa-check-circle'></li>" : ($row->checklist == 0 ? "<li class='fas fa-times'></li>" : ""); ?></td>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
