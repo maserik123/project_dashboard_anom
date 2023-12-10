@@ -3,6 +3,9 @@
         <!-- Info boxes -->
 
         <div class="row">
+            <div class="col-md-12">
+                <small style="font-weight: bold;">Project by Active Status</small>
+            </div>
             <div class="col-lg-3 col-6">
                 <!-- small card -->
                 <div class="small-box bg-primary">
@@ -74,6 +77,9 @@
         </div>
 
         <div class="row">
+            <div class="col-md-12">
+                <small style="font-weight: bold;">Project by Progress</small>
+            </div>
             <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box bg-green">
 
@@ -105,8 +111,8 @@
             </div>
             <!-- /.col -->
             <div class="col-12 col-sm-6 col-md-4">
-                <div class="info-box bg-green">
 
+                <div class="info-box bg-green">
                     <div class="info-box-content">
                         <span class="info-box-text"> <small><strong>Projects Total</strong> <br> (Progress < 50%)</small></span>
                         <span class="info-box-number">
@@ -121,7 +127,11 @@
             <!-- /.col -->
 
             <!-- fix for small devices only -->
-            <div class="clearfix hidden-md-up"></div>
+            <div class="clearfix hidden-md-up">
+            </div>
+            <div class="col-md-12">
+                <small style="font-weight: bold;">Project by Criteria</small>
+            </div>
             <?php foreach ($getCriteria as $row) {
                 $query = $this->db->query('SELECT COUNT(a.project_m_hdr_id) AS total FROM project_m_hdr a 
                 INNER JOIN master_project b ON b.master_project_id = a.master_project_id WHERE b.criteria_project_id ="' . $row->criteria_project_id . '" order by b.criteria_project_id asc')->row_array();
@@ -131,8 +141,8 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">
-                                <small> Progress <?php echo $row->criteria_project_name; ?></small></span>
-                            <span class="info-box-number"><small><?php echo $query['total'] ?></small></span>
+                                <small> Project <?php echo $row->criteria_project_name; ?></small></span>
+                            <span class="info-box-number"><small><?php echo $query['total'] ?> Items</small></span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -239,6 +249,10 @@
                             <div class="col-sm-3 col-6">
                                 <?php $q_rev = $this->db->query('SELECT SUM(revenue_realization) AS actual_tot, SUM(revenue_target) AS plan_tot FROM project_m_hdr')->row_array(); ?>
                                 <?php $q_cost_capex = $this->db->query('SELECT SUM(capex_realization) AS actual_tot, SUM(capex_budget) AS plan_tot FROM project_m_hdr')->row_array(); ?>
+                                <?php $q_mitigation = $this->db->query('SELECT COUNT(*) AS tot_mitigation FROM risk_mitigation')->row_array(); ?>
+                                <?php $q_mitigation_complete = $this->db->query('SELECT COUNT(*) AS complete_mitigation FROM risk_mitigation WHERE checklist = 1')->row_array(); ?>
+                                <?php $q_problem = $this->db->query('SELECT COUNT(*) AS tot_problem FROM issue_problem')->row_array(); ?>
+                                <?php $q_problem_complete = $this->db->query("SELECT COUNT(*) AS complete_problem FROM issue_problem WHERE STATUS = 'completed'")->row_array(); ?>
                                 <div class="description-block border-right">
                                     <span class="description-percentage text-success"> Actual : <?php echo rupiah_format($q_rev['actual_tot']); ?></span>
                                     <h5 class="description-header">Plan : <?php echo rupiah_format($q_rev['plan_tot']); ?></h5>
@@ -258,8 +272,8 @@
                             <!-- /.col -->
                             <div class="col-sm-3 col-6">
                                 <div class="description-block border-right">
-                                    <span class="description-percentage text-primary">Mitigasi Selesai : 60</span>
-                                    <h5 class="description-header">Jumlah Mitigasi : 100</h5>
+                                    <span class="description-percentage text-primary">Mitigasi Selesai : <?php echo $q_mitigation_complete['complete_mitigation']; ?></span>
+                                    <h5 class="description-header">Jumlah Mitigasi : <?php echo $q_mitigation['tot_mitigation']; ?></h5>
                                     <span class="description-text">KEPATUHAN MANRIS</span>
                                 </div>
                                 <!-- /.description-block -->
@@ -268,8 +282,8 @@
                             <div class="col-sm-3 col-6">
                                 <div class="description-block">
                                     <!-- <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> -->
-                                    <span class="description-percentage text-danger">Isu Selesai : 60</span>
-                                    <h5 class="description-header">Jumlah Isu : 100</h5>
+                                    <span class="description-percentage text-danger">Isu Selesai : <?php echo $q_problem_complete['complete_problem'] ?></span>
+                                    <h5 class="description-header">Jumlah Isu : <?php echo $q_problem['tot_problem']; ?></h5>
                                     <span class="description-text">ISU PERMASALAHAN</span>
                                 </div>
                                 <!-- /.description-block -->
@@ -347,54 +361,14 @@
 
                                     // Set data
                                     // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
-                                    series.data.setAll([{
-                                            value: 10,
-                                            category: "Belum Mulai"
-                                        },
-                                        {
-                                            value: 9,
-                                            category: "Persiapan"
-                                        },
-                                        {
-                                            value: 6,
-                                            category: "Perencanaan"
-                                        },
-                                        {
-                                            value: 5,
-                                            category: "Kajian"
-                                        },
-                                        {
-                                            value: 4,
-                                            category: "Pengadaan"
-                                        },
-                                        {
-                                            value: 3,
-                                            category: "Koordinasi"
-                                        },
-                                        {
-                                            value: 1,
-                                            category: "Fisik"
-                                        },
-                                        {
-                                            value: 1,
-                                            category: "Lelang Mitra"
-                                        },
-                                        {
-                                            value: 1,
-                                            category: "Perawatan"
-                                        },
-                                        {
-                                            value: 1,
-                                            category: "Selesai"
-                                        },
-                                        {
-                                            value: 1,
-                                            category: "Pending"
-                                        },
-                                        {
-                                            value: 1,
-                                            category: "Cancel"
-                                        },
+                                    <?php $query = $this->db->query('select * from project_status')->result(); ?>
+                                    series.data.setAll([
+                                        <?php foreach ($query as $row) { ?>
+                                            <?php $q_project = $this->db->query('select count(*) as total from project_m_hdr where project_status_id = "' . $row->project_status_id . '" and year(update_date) = "' . date('Y') . '"')->row_array(); ?> {
+                                                value: <?php echo $q_project['total']; ?>,
+                                                category: "<?php echo $row->status_name; ?>"
+                                            },
+                                        <?php } ?>
                                     ]);
 
 
@@ -417,123 +391,7 @@
                                 }); // end am5.ready()
                             </script>
 
-                            <script>
-                                am5.ready(function() {
 
-                                    // Create root element
-                                    // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-                                    var root = am5.Root.new("chartdiv123");
-
-                                    // Set themes
-                                    // https://www.amcharts.com/docs/v5/concepts/themes/
-                                    root.setThemes([
-                                        am5themes_Animated.new(root)
-                                    ]);
-
-                                    // Create chart
-                                    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
-                                    var chart = root.container.children.push(am5percent.PieChart.new(root, {
-                                        radius: am5.percent(90),
-                                        innerRadius: am5.percent(50),
-                                        layout: root.horizontalLayout
-                                    }));
-
-                                    // Create series
-                                    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Series
-                                    var series = chart.series.push(am5percent.PieSeries.new(root, {
-                                        name: "Series",
-                                        valueField: "sales",
-                                        categoryField: "country"
-                                    }));
-
-                                    // Set data
-                                    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
-                                    series.data.setAll([{
-                                        country: "Belum Mulai",
-                                        sales: 501.9
-                                    }, {
-                                        country: "Persiapan",
-                                        sales: 301.9
-                                    }, {
-                                        country: "Perencanaan",
-                                        sales: 201.1
-                                    }, {
-                                        country: "Kajian",
-                                        sales: 165.8
-                                    }, {
-                                        country: "Pengadaan",
-                                        sales: 139.9
-                                    }, {
-                                        country: "Kordinasi",
-                                        sales: 128.3
-                                    }, {
-                                        country: "Fisik",
-                                        sales: 99
-                                    }, {
-                                        country: "Lelang Mitra",
-                                        sales: 60
-                                    }, {
-                                        country: "Perawatan",
-                                        sales: 50
-                                    }, {
-                                        country: "Selesai",
-                                        sales: 50
-                                    }, {
-                                        country: "Pending",
-                                        sales: 50
-                                    }, {
-                                        country: "Cancel",
-                                        sales: 50
-                                    }]);
-
-                                    // Disabling labels and ticks
-                                    series.labels.template.set("visible", false);
-
-                                    series.ticks.template.set("visible", false);
-
-                                    // Adding gradients
-                                    series.slices.template.set("strokeOpacity", 0);
-                                    series.slices.template.set("fillGradient", am5.RadialGradient.new(root, {
-                                        stops: [{
-                                            brighten: -0.8
-                                        }, {
-                                            brighten: -0.8
-                                        }, {
-                                            brighten: -0.5
-                                        }, {
-                                            brighten: 0
-                                        }, {
-                                            brighten: -0.5
-                                        }]
-                                    }));
-
-                                    // Create legend
-                                    // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
-                                    var legend = chart.children.push(am5.Legend.new(root, {
-                                        centerY: am5.percent(50),
-                                        y: am5.percent(50),
-                                        layout: root.verticalLayout
-                                    }));
-                                    // set value labels align to right
-                                    legend.valueLabels.template.setAll({
-                                        textAlign: "right"
-                                    })
-                                    // set width and max width of labels
-                                    legend.labels.template.setAll({
-                                        maxWidth: 140,
-                                        width: 140,
-                                        oversizedBehavior: "wrap"
-                                    });
-
-                                    legend.data.setAll(series.dataItems);
-
-
-                                    // Play initial series animation
-                                    // https://www.amcharts.com/docs/v5/concepts/animations/#Animation_of_series
-                                    series.appear(1000, 100);
-
-                                }); // end am5.ready()
-                            </script>
                             <div id="chartdiv" style="height: 400px;font-size:11px;font-color:white;"></div>
                         </div>
                     </div>
@@ -668,19 +526,18 @@
 
                                     // Set data
                                     // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
-                                    series.data.setAll([{
-                                        category: "Lithuania",
-                                        value: 500
-                                    }, {
-                                        category: "Czechia",
-                                        value: 300
-                                    }, {
-                                        category: "Ireland",
-                                        value: 200
-                                    }, {
-                                        category: "Germany",
-                                        value: 100
-                                    }]);
+                                    <?php $q_criteria = $this->db->query('select * from criteria_project')->result(); ?>
+
+                                    series.data.setAll([
+                                        <?php foreach ($q_criteria as $row) { ?> {
+                                                <?php $q_valByCriteria = $this->db->query(' SELECT COUNT(b.master_project_id) AS total from project_m_hdr a
+                                    inner join master_project b on b.master_project_id = a.master_project_id 
+                                    where b.criteria_project_id = "' . $row->criteria_project_id . '" and year(update_date) = "' . date('Y') . '"')->row_array(); ?>
+                                                category: "<?php echo $row->criteria_project_name; ?>",
+                                                    value: <?php echo $q_valByCriteria['total']; ?>
+                                            },
+                                        <?php } ?>
+                                    ]);
 
                                     var legend = chart.children.push(am5.Legend.new(root, {
                                         centerX: am5.percent(50),
@@ -698,7 +555,7 @@
                                 }); // end am5.ready()
                             </script>
 
-                            <div id="chartdiv2" style="height: 400px;font-size:11px;"></div>
+                            <div id="chartdiv2" style="height: 400px;font-size:10px;"></div>
                         </div>
                     </div>
                 </div>

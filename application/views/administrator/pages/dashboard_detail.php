@@ -126,7 +126,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <th>
                                                 Duration (Mth)
                                             </th>
-                                            <td><?php echo tgl_indo($query['duration']); ?> Months</td>
+                                            <td><?php echo number_format_decimal($query['duration']); ?> Months</td>
                                         </tr>
 
                                     </table>

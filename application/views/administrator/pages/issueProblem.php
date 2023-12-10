@@ -70,6 +70,7 @@
                 $('[name="solution"]').val(data.solution);
                 $('[name="pic_project_dtl_id"]').val(data.pic_project_dtl_id);
                 $('[name="master_project_id"]').val(data.master_project_id);
+                $('[name="status"]').val(data.status);
                 $('#modalMasterProject').modal('show');
                 $('.modal-title').text('Edit Data Issue Problem');
                 // console.log(data.user_role_id);
@@ -230,6 +231,8 @@
                                     <th>Project Name</th>
                                     <th>Problem</th>
                                     <th>Solution</th>
+                                    <th>PIC</th>
+                                    <th>Status</th>
                                     <th>Tools</th>
                                 </tr>
                             </thead>
@@ -278,6 +281,18 @@
                         </label>
                         <div class="col-md-12 col-sm-9 col-xs-12">
                             <input type="text" id="solution" name="solution" placeholder="Solution" required="required" class="form-control ">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Status<span class="required">*</span>
+                        </label>
+                        <div class="col-md-12 col-sm-9 col-xs-12">
+                            <select name="status" id="status" class="form-control">
+                                <option value="">Select Status</option>
+                                <option value="completed">Completed</option>
+                                <option value="pending">Pending</option>
+                                <option value="progress">In Progress</option>
+                            </select>
                         </div>
                     </div>
                     <div class="item form-group">

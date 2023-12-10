@@ -954,8 +954,9 @@ class Administrator extends CI_Controller
                 $th3    = '<div class="text-center">' . $row->problem . '</div>';
                 $th4    = '<div class="text-center">' . $row->solution . '</div>';
                 $th5    = '<div class="text-center">' . $row->pic_project_name . '</div>';
-                $th6   = '<div class="text-center" style="width:100px;">' . (get_btn_group1('updateData(' . $userid . ')', 'deleteData(' . $userid . ')')) . '</div>';
-                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6));
+                $th6    = '<div class="text-center">' . $row->status . '</div>';
+                $th7   = '<div class="text-center" style="width:100px;">' . (get_btn_group1('updateData(' . $userid . ')', 'deleteData(' . $userid . ')')) . '</div>';
+                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7));
             }
             $dt['data'] = $data;
             echo json_encode($dt);
@@ -965,6 +966,7 @@ class Administrator extends CI_Controller
             $this->form_validation->set_rules("solution", "Solution", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("pic_project_dtl_id", "PIC Project", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("master_project_id", "Name Project", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("status", "Status", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_error_delimiters('<small id="text-error" style="color:red;">* ', '</small>');
             if ($this->form_validation->run() == FALSE) {
                 $result = array('status' => 'error', 'msg' => 'Data is not right, please check again.');
@@ -976,7 +978,8 @@ class Administrator extends CI_Controller
                     'problem'                   => htmlspecialchars($this->input->post('problem')),
                     'solution'                  => htmlspecialchars($this->input->post('solution')),
                     'pic_project_dtl_id'        => htmlspecialchars($this->input->post('pic_project_dtl_id')),
-                    'master_project_id'        => htmlspecialchars($this->input->post('master_project_id')),
+                    'master_project_id'         => htmlspecialchars($this->input->post('master_project_id')),
+                    'status'                    => htmlspecialchars($this->input->post('status')),
                 );
                 $result['messages'] = '';
                 $result = array('status' => 'success', 'msg' => 'Data Inserted!');
@@ -997,6 +1000,7 @@ class Administrator extends CI_Controller
             $this->form_validation->set_rules("solution", "Solution", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("pic_project_dtl_id", "PIC Project Name", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("master_project_id", "Name Project", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("status", "Status", "trim|required", array('required' => '{field} cannot be null !'));
 
             $this->form_validation->set_error_delimiters('<small id="text-error" style="color:red;">*', '</small>');
             if ($this->form_validation->run() == FALSE) {
@@ -1011,6 +1015,7 @@ class Administrator extends CI_Controller
                     'solution'                  => htmlspecialchars($this->input->post('solution')),
                     'pic_project_dtl_id'        => htmlspecialchars($this->input->post('pic_project_dtl_id')),
                     'master_project_id'        => htmlspecialchars($this->input->post('master_project_id')),
+                    'status'        => htmlspecialchars($this->input->post('status')),
 
                 );
                 $result['messages']    = '';

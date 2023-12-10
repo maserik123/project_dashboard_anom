@@ -12,7 +12,7 @@ class Model_IssueProblem extends CI_Model
 
     function getAllData()
     {
-        $this->datatables->select('a.issue_problem_id, c.project_name, a.problem, a.solution, b.pic_project_name');
+        $this->datatables->select('a.issue_problem_id, c.project_name, a.problem, a.solution, b.pic_project_name, a.status, a.status');
         $this->datatables->from('issue_problem a');
         $this->datatables->join('pic_project_dtl b', 'b.pic_project_dtl_id = a.pic_project_dtl_id', 'inner');
         $this->datatables->join('master_project c', 'c.master_project_id = a.master_project_id', 'inner');
