@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 06, 2023 at 07:34 AM
+-- Generation Time: Dec 10, 2023 at 08:22 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.1.17
 
@@ -44,6 +44,28 @@ INSERT INTO `criteria_project` (`criteria_project_id`, `criteria_project_name`) 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `issue_problem`
+--
+
+CREATE TABLE `issue_problem` (
+  `issue_problem_id` int(11) NOT NULL,
+  `problem` text DEFAULT NULL,
+  `solution` text DEFAULT NULL,
+  `pic_project_dtl_id` int(11) DEFAULT NULL,
+  `master_project_id` int(11) DEFAULT NULL,
+  `status` varchar(15) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `issue_problem`
+--
+
+INSERT INTO `issue_problem` (`issue_problem_id`, `problem`, `solution`, `pic_project_dtl_id`, `master_project_id`, `status`) VALUES
+(1, 'tes', 'test', 1, 10, 'completed');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `master_project`
 --
 
@@ -60,7 +82,7 @@ CREATE TABLE `master_project` (
 
 INSERT INTO `master_project` (`master_project_id`, `project_name`, `criteria_project_id`, `project_description`) VALUES
 (10, 'Kerjasama NPEA', 3, 'Akses Proyek NPEA merupakan PSN milik PT IPC yang melintasi lahan C.01, C.02 dan C.03 milik KBN\r\nKerja Sama antara Kawasan Industri dan Pelabuhan (Pilot Project PT Kawasan Berikat Nusantara)'),
-(11, 'Perpanjangan Kerjasama Tj. Priok', 3, '-'),
+(11, 'Perpanjangan Kerjasama Tj. Priok', 1, '-'),
 (12, 'Imbreng Asset PT KCN', 3, '-'),
 (13, 'Aktivasi MBI sebagai JV KI', 3, '-'),
 (14, 'Pengembangan PT KGM', 3, '-'),
@@ -137,16 +159,17 @@ CREATE TABLE `project_information` (
   `contract_price` varchar(25) NOT NULL,
   `termyn_value` int(11) NOT NULL,
   `payed` varchar(12) NOT NULL,
-  `kind_of_consultant` enum('Consultant','Mitra') DEFAULT NULL
+  `kind_of_consultant` enum('Consultant','Mitra') DEFAULT NULL,
+  `waktu_konsultan_mitra` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `project_information`
 --
 
-INSERT INTO `project_information` (`project_information_id`, `master_project_id`, `consultant_name`, `contract_price`, `termyn_value`, `payed`, `kind_of_consultant`) VALUES
-(1, 1, 'Nama Konsultan 1', '1000000', 3, '200000', 'Mitra'),
-(2, 1, 'Nama Konsultan 2', '2000000', 3, '200000', 'Consultant');
+INSERT INTO `project_information` (`project_information_id`, `master_project_id`, `consultant_name`, `contract_price`, `termyn_value`, `payed`, `kind_of_consultant`, `waktu_konsultan_mitra`) VALUES
+(4, 10, 'Consultan1', '1000000', 3, '500000', 'Consultant', '3 Bulan'),
+(5, 10, 'PT Pelindo (Persero)', '50000000', 5, '3000000', 'Mitra', 'Jangka Panjang');
 
 -- --------------------------------------------------------
 
@@ -185,14 +208,14 @@ CREATE TABLE `project_m_hdr` (
   `criteria_project_id` int(11) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
-  `capex_budget` varchar(255) NOT NULL,
-  `capex_realization` varchar(255) NOT NULL,
-  `contract_value` varchar(255) NOT NULL,
-  `revenue_target` varchar(255) NOT NULL,
-  `revenue_realization` varchar(255) NOT NULL,
+  `capex_budget` varchar(255) NOT NULL DEFAULT '0',
+  `capex_realization` varchar(255) NOT NULL DEFAULT '0',
+  `contract_value` varchar(255) NOT NULL DEFAULT '0',
+  `revenue_target` varchar(255) NOT NULL DEFAULT '0',
+  `revenue_realization` varchar(255) NOT NULL DEFAULT '0',
   `project_status_id` int(11) NOT NULL,
-  `progress_kajian` varchar(45) NOT NULL,
-  `progress_fisik` varchar(45) NOT NULL,
+  `progress_kajian` varchar(45) NOT NULL DEFAULT '0',
+  `progress_fisik` varchar(45) NOT NULL DEFAULT '0',
   `update_status` text NOT NULL,
   `foto` text NOT NULL,
   `crt_date` date DEFAULT NULL,
@@ -204,7 +227,8 @@ CREATE TABLE `project_m_hdr` (
 --
 
 INSERT INTO `project_m_hdr` (`project_m_hdr_id`, `master_project_id`, `pic_project_hdr_id`, `criteria_project_id`, `start_date`, `end_date`, `capex_budget`, `capex_realization`, `contract_value`, `revenue_target`, `revenue_realization`, `project_status_id`, `progress_kajian`, `progress_fisik`, `update_status`, `foto`, `crt_date`, `update_date`) VALUES
-(3, 10, 1, 0, '2023-11-01', '2023-11-15', '0', '0', '', '0', '0', 11, '', '', '', '', '2023-12-06', '2023-12-06');
+(3, 10, 1, 0, '2023-11-01', '2023-11-15', '10000', '19000000', '0', '5000000000', '4000000', 11, '35', '0', '', '1702199058page_pcr.png', '2023-12-06', '2023-12-08'),
+(5, 11, 2, 0, '2023-12-11', '2024-01-30', '24000000', '0', '26000000', '0', '0', 3, '23', '45', '', '', '2023-12-11', '2023-12-11');
 
 -- --------------------------------------------------------
 
@@ -254,11 +278,11 @@ CREATE TABLE `risk_mitigation` (
 --
 
 INSERT INTO `risk_mitigation` (`risk_mitigation_id`, `master_project_id`, `risk_profile`, `mitigation`, `checklist`) VALUES
-(1, 1, 'Ini masalah yang cukup berat', 'Membuat', 'Disetujui'),
+(1, 1, 'Ini masalah yang cukup berat', 'Membuat', '1'),
 (2, 1, 'Sangatlah berat ini koh', 'Asuransi', ''),
 (4, 10, 'Nilai Kompensasi yang tidak sesuai', 'Penunjukan KJPP pembanding sebagai second opinion', '1'),
 (5, 10, 'Kehilangan Pendapatan Jangka Panjang (Lahan Komersial)', 'Perjanjian anak dengan Pelindo tentang  pengembangan bisnis', ''),
-(6, 10, 'Ada beberapa investor yang lahan sewanya berkurang', 'Disiapkan lahan pengganti untuk relokasi investor', ''),
+(6, 10, 'Ada beberapa investor yang lahan sewanya berkurang', 'Disiapkan lahan pengganti untuk relokasi investor', '0'),
 (7, 10, 'Adanya gugatan dari investor PPTI/Non PPTI', 'Dilakukan sosialisasi 1 on 1 kepada para tenant', '1'),
 (8, 10, 'Citra PT KBN menjadi buruk', 'Kewajiban PT Pelindo untuk menjaga kebersihan kawasan', '1');
 
@@ -294,6 +318,7 @@ CREATE TABLE `v_project_m_hdr` (
 ,`duration` decimal(16,4)
 ,`capex_budget` varchar(255)
 ,`capex_realization` varchar(255)
+,`contract_value` varchar(255)
 ,`revenue_target` varchar(255)
 ,`revenue_realization` varchar(255)
 ,`status_name` varchar(255)
@@ -322,7 +347,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_project_m_hdr`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_project_m_hdr`  AS SELECT `a`.`project_m_hdr_id` AS `project_m_hdr_id`, `b`.`project_name` AS `project_name`, `c`.`pic_project_name` AS `pic_project_name`, `d`.`criteria_project_name` AS `criteria_project_name`, `a`.`start_date` AS `start_date`, `a`.`end_date` AS `end_date`, (select (to_days(`a`.`end_date`) - to_days(`a`.`start_date`)) / 30.436875) AS `duration`, `a`.`capex_budget` AS `capex_budget`, `a`.`capex_realization` AS `capex_realization`, `a`.`revenue_target` AS `revenue_target`, `a`.`revenue_realization` AS `revenue_realization`, `e`.`status_name` AS `status_name`, (select sum(`project_m_dtl`.`progress`) / count(`project_m_dtl`.`master_project_id`) AS `progress` from `project_m_dtl` where `project_m_dtl`.`master_project_id` = `a`.`master_project_id`) AS `progress_project`, `a`.`progress_fisik` AS `progress_fisik`, `a`.`progress_kajian` AS `progress_kajian`, `a`.`foto` AS `foto`, (select count(`risk_mitigation`.`mitigation`) from `risk_mitigation` where `risk_mitigation`.`mitigation` <> '' and `risk_mitigation`.`mitigation` is not null and `risk_mitigation`.`master_project_id` = `a`.`master_project_id`) AS `mitigation`, (select count(`risk_mitigation`.`checklist`) from `risk_mitigation` where `risk_mitigation`.`checklist` <> '' and `risk_mitigation`.`checklist` is not null and `risk_mitigation`.`master_project_id` = `a`.`master_project_id`) AS `checklist`, CASE WHEN `a`.`update_date` = curdate() THEN 'Up to Date' WHEN to_days(curdate()) - to_days(`a`.`update_date`) >= 2 AND to_days(curdate()) - to_days(`a`.`update_date`) <= 7 THEN '2 - 7 Days' WHEN to_days(curdate()) - to_days(`a`.`update_date`) >= 7 AND to_days(curdate()) - to_days(`a`.`update_date`) <= 14 THEN '7 - 14 Days' WHEN to_days(curdate()) - to_days(`a`.`update_date`) > 14 THEN '> 2 Weeks ' ELSE 'Not Started' END AS `update_status` FROM ((((`project_m_hdr` `a` join `master_project` `b` on(`b`.`master_project_id` = `a`.`master_project_id`)) join `pic_project_hdr` `c` on(`c`.`pic_project_hdr_id` = `a`.`pic_project_hdr_id`)) join `criteria_project` `d` on(`d`.`criteria_project_id` = `b`.`criteria_project_id`)) join `project_status` `e` on(`e`.`project_status_id` = `a`.`project_status_id`)) ORDER BY `a`.`project_m_hdr_id` ASC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_project_m_hdr`  AS SELECT `a`.`project_m_hdr_id` AS `project_m_hdr_id`, `b`.`project_name` AS `project_name`, `c`.`pic_project_name` AS `pic_project_name`, `d`.`criteria_project_name` AS `criteria_project_name`, `a`.`start_date` AS `start_date`, `a`.`end_date` AS `end_date`, (select (to_days(`a`.`end_date`) - to_days(`a`.`start_date`)) / 30.436875) AS `duration`, `a`.`capex_budget` AS `capex_budget`, `a`.`capex_realization` AS `capex_realization`, `a`.`contract_value` AS `contract_value`, `a`.`revenue_target` AS `revenue_target`, `a`.`revenue_realization` AS `revenue_realization`, `e`.`status_name` AS `status_name`, (select sum(`project_m_dtl`.`progress`) / count(`project_m_dtl`.`master_project_id`) AS `progress` from `project_m_dtl` where `project_m_dtl`.`master_project_id` = `a`.`master_project_id`) AS `progress_project`, `a`.`progress_fisik` AS `progress_fisik`, `a`.`progress_kajian` AS `progress_kajian`, `a`.`foto` AS `foto`, (select count(`risk_mitigation`.`mitigation`) from `risk_mitigation` where `risk_mitigation`.`mitigation` <> '' and `risk_mitigation`.`mitigation` is not null and `risk_mitigation`.`master_project_id` = `a`.`master_project_id`) AS `mitigation`, (select count(`risk_mitigation`.`checklist`) from `risk_mitigation` where `risk_mitigation`.`checklist` <> '' and `risk_mitigation`.`checklist` is not null and `risk_mitigation`.`master_project_id` = `a`.`master_project_id`) AS `checklist`, CASE WHEN `a`.`update_date` = curdate() THEN 'Up to Date' WHEN to_days(curdate()) - to_days(`a`.`update_date`) >= 2 AND to_days(curdate()) - to_days(`a`.`update_date`) <= 7 THEN '2 - 7 Days' WHEN to_days(curdate()) - to_days(`a`.`update_date`) >= 7 AND to_days(curdate()) - to_days(`a`.`update_date`) <= 14 THEN '7 - 14 Days' WHEN to_days(curdate()) - to_days(`a`.`update_date`) > 14 THEN '> 2 Weeks ' ELSE 'Not Started' END AS `update_status` FROM ((((`project_m_hdr` `a` join `master_project` `b` on(`b`.`master_project_id` = `a`.`master_project_id`)) join `pic_project_hdr` `c` on(`c`.`pic_project_hdr_id` = `a`.`pic_project_hdr_id`)) join `criteria_project` `d` on(`d`.`criteria_project_id` = `b`.`criteria_project_id`)) join `project_status` `e` on(`e`.`project_status_id` = `a`.`project_status_id`)) ORDER BY `a`.`project_m_hdr_id` ASC ;
 
 --
 -- Indexes for dumped tables
@@ -333,6 +358,12 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 ALTER TABLE `criteria_project`
   ADD PRIMARY KEY (`criteria_project_id`);
+
+--
+-- Indexes for table `issue_problem`
+--
+ALTER TABLE `issue_problem`
+  ADD PRIMARY KEY (`issue_problem_id`);
 
 --
 -- Indexes for table `master_project`
@@ -393,6 +424,12 @@ ALTER TABLE `criteria_project`
   MODIFY `criteria_project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `issue_problem`
+--
+ALTER TABLE `issue_problem`
+  MODIFY `issue_problem_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `master_project`
 --
 ALTER TABLE `master_project`
@@ -414,7 +451,7 @@ ALTER TABLE `pic_project_hdr`
 -- AUTO_INCREMENT for table `project_information`
 --
 ALTER TABLE `project_information`
-  MODIFY `project_information_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `project_information_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `project_m_dtl`
@@ -426,7 +463,7 @@ ALTER TABLE `project_m_dtl`
 -- AUTO_INCREMENT for table `project_m_hdr`
 --
 ALTER TABLE `project_m_hdr`
-  MODIFY `project_m_hdr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `project_m_hdr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `project_status`
