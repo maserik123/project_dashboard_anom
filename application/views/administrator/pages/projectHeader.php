@@ -216,6 +216,27 @@
             }
         });
     }
+
+    function updateFoto(id) {
+        //Load data dari ajax
+        $.ajax({
+            url: "<?php echo base_url('administrator/listLaptop/getById/'); ?>" + id,
+            type: "GET",
+            dataType: "JSON",
+            success: function(resp) {
+                data = resp.data
+                $('[name="id_list_laptop"]').val(data.list_laptop_id);
+
+                $('#modal_foto').modal('show');
+                $('.modal-title').text('Upload Foto');
+
+                // console.log(data.user_role_id);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error Get Data From Ajax');
+            }
+        });
+    }
 </script>
 
 <section class="content">
@@ -266,7 +287,36 @@
         </div>
     </div>
 </section>
+<div id="modal_foto" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Update Foto</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div style="text-align: right;color:blue">
+                </div>
+            </div>
+            <?php echo form_open('administrator/listLaptop/uploadFoto', array('id' => 'form_foto', 'method' => 'post',  'enctype' => 'multipart/form-data')) ?>
+            <div class="modal-body">
+                <input type="hidden" id="id_list_laptop" value="" name="id_list_laptop">
+                <fieldset>
+                    <div class="control-group form-group">
+                        <label class="control-label span4">Update Foto<small class="required">(Optional)</small></label>
+                        <div class="controls">
+                            <input name="foto" id="foto" class="span3" type="file" autocomplete="false">
+                        </div>
+                    </div>
+                </fieldset>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <!-- <button type="reset" class="btn btn-warning">Reset</button> -->
+                <button type="submit" class="btn btn-primary"><i class="icon-save"></i> Simpan</button>
 
+            </div>
+        </div>
+        <?php echo form_close(); ?>
+    </div>
+</div>
 <div class="modal fade" id="modalMasterProject" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">

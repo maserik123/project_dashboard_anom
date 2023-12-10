@@ -11,7 +11,7 @@
     ],
     "general":{
         "isProdEnv":false,
-        "base_url":"http://localhost/monitoring_project/",
+        "base_url":"http://localhost/monitoring_project_new/",
         "invalidIP":"0.0.0.0",
         "localIP":"127.0.0.1",
         "installed":true,

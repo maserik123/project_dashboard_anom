@@ -8,7 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Top Navigation + Sidebar</title>
+    <title><?php echo $title ?></title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -39,15 +39,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Projects Detail <small>Example 3.0</small></h1>
+                            <?php $query = $this->db->query('select master_project_id from project_m_hdr where project_m_hdr_id ="' . $project_id . '"')->row_array(); ?>
+                            <?php $getProject = $this->db->query('select project_name from master_project where master_project_id = "' . $query['master_project_id'] . '"')->row_array(); ?>
+                            <?php $getDetailProject = $this->db->query('select b.* from master_project a inner join criteria_project b on b.criteria_project_id = a.criteria_project_id')->row_array(); ?>
+                            <?php $getPICDetail = $this->db->query('select b.pic_project_name from project_m_hdr a inner join pic_project_hdr b on b.pic_project_hdr_id = a.pic_project_hdr_id where a.project_m_hdr_id ="' . $project_id . '"')->row_array(); ?>
+                            <?php $getStatus = $this->db->query('select b.status_name from project_m_hdr a inner join project_status b on b.project_status_id = a.project_status_id where a.project_m_hdr_id = "' . $project_id . '"')->row_array(); ?>
+                            <?php $getDtlProjectHdr = $this->db->query('select * from project_m_hdr where project_m_hdr_id = "' . $project_id . '"')->row_array(); ?>
+
+                            <h1 class="m-0">Detail Projects <small><?php echo $getProject['project_name']; ?></small></h1>
+
                         </div><!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item"><a href="#">Layout</a></li>
-                                <li class="breadcrumb-item active">Top Navigation</li>
-                            </ol>
-                        </div><!-- /.col -->
+
                     </div><!-- /.row -->
                 </div><!-- /.container-fluid -->
             </div>
@@ -60,15 +62,42 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="col-lg-6">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
+                                    <h5 class="card-title">Project Specification</h5>
+                                    <br>
+                                    <ul>
+                                        <li>Type/Criteria : <?php echo $getDetailProject['criteria_project_name'];  ?></li>
+                                        <li>PIC Project : <?php echo $getPICDetail['pic_project_name'];  ?></li>
+                                        <li>Status Project : <?php echo $getStatus['status_name'];  ?></li>
+                                        <li>Anggaran : <?php echo rupiah_format($getDtlProjectHdr['capex_budget']);  ?></li>
+                                        <li>Anggaran Terpakai : <?php echo rupiah_format($getDtlProjectHdr['capex_realization']);  ?></li>
+                                    </ul>
+                                    <div class="col-lg-8 col-6">
+                                        <!-- small card -->
+                                        <div class="small-box bg-primary">
+                                            <div class="inner">
+                                                <h3>50%</h3>
 
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the card's
-                                        content.
-                                    </p>
+                                                <p>Progress Totals</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fas fa-chart-bar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8 col-6">
+                                        <!-- small card -->
+                                        <div class="small-box bg-danger">
+                                            <div class="inner">
+                                                <h3>50%</h3>
 
-                                    <a href="#" class="card-link">Card link</a>
-                                    <a href="#" class="card-link">Another link</a>
+                                                <p>Progress Kajian</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fas fa-chart-bar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
 

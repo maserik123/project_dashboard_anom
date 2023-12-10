@@ -25,7 +25,7 @@ class Administrator extends CI_Controller
 
     function dashboard_detail($project_id = '')
     {
-        $view['title'] = 'Home Page';
+        $view['title'] = 'Detail Dashboard Page';
         $view['pageName'] = 'Detail Dashboard';
         $view['project_id'] = $project_id;
         $this->load->view('administrator/pages/dashboard_detail', $view);
@@ -103,6 +103,25 @@ class Administrator extends CI_Controller
             $dt['data'] = $data;
             echo json_encode($dt);
             die;
+        } else if ($param == 'uploadFoto') {
+            if (isset($_FILES['foto']['size']) != 0) {
+                $config['upload_path']   = 'gambar';
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
+                $config['max_size']      = '2048';
+                $new_name        = time() . $_FILES["foto"]['name'];
+                $config['file_name']     = str_replace(array('-', ' '), '_', $new_name);
+                $data['list_laptop_id']            = $this->input->post('id_list_laptop');
+                $data['foto']       = str_replace(array('-', ' '), '_', $new_name);
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload('foto')) {
+                    $this->session->set_flashdata('error', 'Foto gagal diupload. ' . $this->upload->display_errors());
+                    redirect('administrator/listLaptop');
+                } else {
+                    $this->Model_listLaptop->updateFoto($data['list_laptop_id'], 'foto', $data['foto']);
+                    $this->session->set_flashdata('success', 'Foto berhasil diupload!' . $this->upload->display_errors());
+                    redirect('administrator/listLaptop');
+                }
+            }
         } else if ($param == 'insert') {
             $this->form_validation->set_rules("master_project_id", "Project Name", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("pic_project_hdr_id", "Project PIC", "trim|required", array('required' => '{field} cannot be null !'));
