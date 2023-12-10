@@ -220,15 +220,15 @@
     function updateFoto(id) {
         //Load data dari ajax
         $.ajax({
-            url: "<?php echo base_url('administrator/listLaptop/getById/'); ?>" + id,
+            url: "<?php echo base_url('administrator/projectHeader/getById/'); ?>" + id,
             type: "GET",
             dataType: "JSON",
             success: function(resp) {
                 data = resp.data
-                $('[name="id_list_laptop"]').val(data.list_laptop_id);
+                $('[name="project_m_hdr_id"]').val(data.project_m_hdr_id);
 
                 $('#modal_foto').modal('show');
-                $('.modal-title').text('Upload Foto');
+                $('.modal-title').text('Upload Gambar');
 
                 // console.log(data.user_role_id);
             },
@@ -297,9 +297,9 @@
                 <div style="text-align: right;color:blue">
                 </div>
             </div>
-            <?php echo form_open('administrator/listLaptop/uploadFoto', array('id' => 'form_foto', 'method' => 'post',  'enctype' => 'multipart/form-data')) ?>
+            <?php echo form_open('administrator/projectHeader/uploadFoto', array('id' => 'form_foto', 'method' => 'post',  'enctype' => 'multipart/form-data')) ?>
             <div class="modal-body">
-                <input type="hidden" id="id_list_laptop" value="" name="id_list_laptop">
+                <input type="hidden" id="project_m_hdr_id" value="" name="project_m_hdr_id">
                 <fieldset>
                     <div class="control-group form-group">
                         <label class="control-label span4">Update Foto<small class="required">(Optional)</small></label>

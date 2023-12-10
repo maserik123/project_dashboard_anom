@@ -12,7 +12,7 @@ class Model_ProjectInformation extends CI_Model
 
     function getAllData()
     {
-        $this->datatables->select('a.project_information_id, b.project_name, a.consultant_name, a.contract_price, a.termyn_value, a.payed, a.kind_of_consultant');
+        $this->datatables->select('a.project_information_id, b.project_name, a.consultant_name, a.contract_price, a.termyn_value, a.payed, a.kind_of_consultant, a.waktu_konsultan_mitra');
         $this->datatables->from('project_information a');
         $this->datatables->join('master_project b', 'b.master_project_id = a.master_project_id', 'inner');
         return $this->datatables->generate();

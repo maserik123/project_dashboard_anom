@@ -49,7 +49,7 @@ class Administrator extends CI_Controller
             foreach ($dt['data'] as $row) {
                 $userid     = ($row->project_m_hdr_id);
                 $th1    = '<div class="text-center">' . ++$start . '</div>';
-                $th2   = '<div class="text-center" style="width:100px;">' . (get_btn_group1('updateData(' . $userid . ')', 'deleteData(' . $userid . ')')) . '</div>';
+                $th2   = '<div class="text-center" style="width:100px;">' . get_btn_edit('updateFoto(' . $userid . ')') . (get_btn_group1('updateData(' . $userid . ')', 'deleteData(' . $userid . ')')) . '</div>';
                 $th3    = '<div class="text-center">' . $row->project_name . '</div>';
                 $th4    = '<div class="text-center">' . $row->pic_project_name . '</div>';
                 $th5    = '<div class="text-center">' . $row->criteria_project_name . '</div>';
@@ -110,16 +110,16 @@ class Administrator extends CI_Controller
                 $config['max_size']      = '2048';
                 $new_name        = time() . $_FILES["foto"]['name'];
                 $config['file_name']     = str_replace(array('-', ' '), '_', $new_name);
-                $data['list_laptop_id']            = $this->input->post('id_list_laptop');
+                $data['project_m_hdr_id']            = $this->input->post('project_m_hdr_id');
                 $data['foto']       = str_replace(array('-', ' '), '_', $new_name);
                 $this->load->library('upload', $config);
                 if (!$this->upload->do_upload('foto')) {
                     $this->session->set_flashdata('error', 'Foto gagal diupload. ' . $this->upload->display_errors());
-                    redirect('administrator/listLaptop');
+                    redirect('administrator/projectHeader');
                 } else {
-                    $this->Model_listLaptop->updateFoto($data['list_laptop_id'], 'foto', $data['foto']);
-                    $this->session->set_flashdata('success', 'Foto berhasil diupload!' . $this->upload->display_errors());
-                    redirect('administrator/listLaptop');
+                    $this->Model_ProjectHeader->updateFoto($data['project_m_hdr_id'], 'foto', $data['foto']);
+                    $this->session->set_flashdata('success', 'Gambar berhasil diupload!' . $this->upload->display_errors());
+                    redirect('administrator/projectHeader');
                 }
             }
         } else if ($param == 'insert') {
@@ -847,8 +847,9 @@ class Administrator extends CI_Controller
                 $th5    = '<div class="text-center">' . $row->termyn_value . '</div>';
                 $th6    = '<div class="text-center">' . $row->payed . '</div>';
                 $th7    = '<div class="text-center">' . $row->kind_of_consultant . '</div>';
-                $th8   = '<div class="text-center" style="width:100px;">' . (get_btn_group1('updateData(' . $userid . ')', 'deleteData(' . $userid . ')')) . '</div>';
-                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th8));
+                $th8    = '<div class="text-center">' . $row->waktu_konsultan_mitra . '</div>';
+                $th9   = '<div class="text-center" style="width:100px;">' . (get_btn_group1('updateData(' . $userid . ')', 'deleteData(' . $userid . ')')) . '</div>';
+                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th8, $th9));
             }
             $dt['data'] = $data;
             echo json_encode($dt);
@@ -860,6 +861,7 @@ class Administrator extends CI_Controller
             $this->form_validation->set_rules("termyn_value", "Termyn Value", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("payed", "Payed", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("kind_of_consultant", "Type", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("waktu_konsultan_mitra", "Waktu Konsultan Mitra", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_error_delimiters('<small id="text-error" style="color:red;">* ', '</small>');
             if ($this->form_validation->run() == FALSE) {
                 $result = array('status' => 'error', 'msg' => 'Data is not right, please check again.');
@@ -874,6 +876,7 @@ class Administrator extends CI_Controller
                     'termyn_value'          => htmlspecialchars($this->input->post('termyn_value')),
                     'payed'          => htmlspecialchars($this->input->post('payed')),
                     'kind_of_consultant'          => htmlspecialchars($this->input->post('kind_of_consultant')),
+                    'waktu_konsultan_mitra'          => htmlspecialchars($this->input->post('waktu_konsultan_mitra')),
                 );
                 $result['messages'] = '';
                 $result = array('status' => 'success', 'msg' => 'Data Inserted!');
@@ -896,6 +899,7 @@ class Administrator extends CI_Controller
             $this->form_validation->set_rules("termyn_value", "Termyn Value", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("payed", "Payed", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("kind_of_consultant", "Type", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("waktu_konsultan_mitra", "Waktu Konsultan Mitra", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_error_delimiters('<small id="text-error" style="color:red;">*', '</small>');
             if ($this->form_validation->run() == FALSE) {
                 $result = array('status' => 'error', 'msg' => 'Data yang anda isi belum benar !');
@@ -910,7 +914,8 @@ class Administrator extends CI_Controller
                     'contract_price'          => htmlspecialchars($this->input->post('contract_price')),
                     'termyn_value'          => htmlspecialchars($this->input->post('termyn_value')),
                     'payed'          => htmlspecialchars($this->input->post('payed')),
-                    'kind_of_consultant'          => htmlspecialchars($this->input->post('kind_of_consultant'))
+                    'kind_of_consultant'          => htmlspecialchars($this->input->post('kind_of_consultant')),
+                    'waktu_konsultan_mitra'          => htmlspecialchars($this->input->post('waktu_konsultan_mitra'))
                 );
                 $result['messages']    = '';
                 $result        = array('status' => 'success', 'msg' => 'Update Success !');

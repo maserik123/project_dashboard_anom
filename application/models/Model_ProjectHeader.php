@@ -42,6 +42,25 @@ class Model_ProjectHeader extends CI_Model
         return $this->datatables->generate();
     }
 
+    public function updateFoto($id, $var, $data)
+    {
+        if ($var == 'foto') {
+            $this->deleteFoto($id);
+        }
+        return $this->db->query('update project_m_hdr set ' . $var . ' = "' . $data . '" where project_m_hdr_id = "' . $id . '"');
+    }
+
+    public function deleteFoto($id)
+    {
+        $product = $this->getById($id);
+        $filename = explode(".", $product->foto)[0];
+        if (empty($product->foto)) {
+            return '';
+        } else {
+            return array_map('unlink', glob(FCPATH . "/gambar/$filename.*"));
+        }
+    }
+
     function addData($data)
     {
         $this->db->insert('project_m_hdr', $data);

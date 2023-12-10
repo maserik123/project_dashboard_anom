@@ -72,6 +72,7 @@
                 $('[name="termyn_value"]').val(data.termyn_value);
                 $('[name="payed"]').val(data.payed);
                 $('[name="kind_of_consultant"]').val(data.kind_of_consultant);
+                $('[name="waktu_konsultan_mitra"]').val(data.waktu_konsultan_mitra);
                 $('#modalMasterProject').modal('show');
                 $('.modal-title').text('Edit Data Risk Mitigation');
                 // console.log(data.user_role_id);
@@ -235,6 +236,7 @@
                                     <th>Termyn Value</th>
                                     <th>Payed</th>
                                     <th>Type</th>
+                                    <th>Dateline Consultant Mitra (Month)</th>
                                     <th>Tools</th>
                                 </tr>
                             </thead>
@@ -312,6 +314,13 @@
                                 <option value="Consultant">Consultant</option>
                                 <option value="Mitra">Mitra</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-12 col-sm-3 col-xs-12">Time Consultant Mitra<span class="required">*</span>
+                        </label>
+                        <div class="col-md-12 col-sm-9 col-xs-12">
+                            <input type="text" name='waktu_konsultan_mitra' class="form-control" value="" id='waktu_konsultan_mitra'>
                         </div>
                     </div>
                 </div>

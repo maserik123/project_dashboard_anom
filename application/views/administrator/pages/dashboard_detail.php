@@ -39,8 +39,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <?php $query = $this->db->query('select master_project_id from project_m_hdr where project_m_hdr_id ="' . $project_id . '"')->row_array(); ?>
-                            <?php $getProject = $this->db->query('select project_name from master_project where master_project_id = "' . $query['master_project_id'] . '"')->row_array(); ?>
+                            <?php $query = $this->db->query('select *, (SELECT DATEDIFF(end_date, start_date) / 30.436875) as duration from project_m_hdr where project_m_hdr_id ="' . $project_id . '"')->row_array(); ?>
+                            <?php $getProject = $this->db->query('select project_name, project_description from master_project where master_project_id = "' . $query['master_project_id'] . '"')->row_array(); ?>
                             <?php $getDetailProject = $this->db->query('select b.* from master_project a inner join criteria_project b on b.criteria_project_id = a.criteria_project_id')->row_array(); ?>
                             <?php $getPICDetail = $this->db->query('select b.pic_project_name from project_m_hdr a inner join pic_project_hdr b on b.pic_project_hdr_id = a.pic_project_hdr_id where a.project_m_hdr_id ="' . $project_id . '"')->row_array(); ?>
                             <?php $getStatus = $this->db->query('select b.status_name from project_m_hdr a inner join project_status b on b.project_status_id = a.project_status_id where a.project_m_hdr_id = "' . $project_id . '"')->row_array(); ?>
@@ -103,40 +103,123 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                             <div class="card card-primary card-outline">
                                 <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
+                                    <h5 class="card-title">Time</h5>
 
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the card's
-                                        content.
-                                    </p>
-                                    <a href="#" class="card-link">Card link</a>
-                                    <a href="#" class="card-link">Another link</a>
+                                    <table class="table table-responsive">
+
+
+                                        <tr>
+                                            <th>
+                                                Target Start (Date)
+                                            </th>
+                                            <td><?php echo tgl_indo($query['start_date']); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                Target End (Date)
+                                            </th>
+                                            <td><?php echo tgl_indo($query['end_date']); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                Duration (Mth)
+                                            </th>
+                                            <td><?php echo tgl_indo($query['duration']); ?> Months</td>
+                                        </tr>
+
+                                    </table>
                                 </div>
                             </div><!-- /.card -->
                         </div>
                         <!-- /.col-md-6 -->
                         <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="card-title m-0">Featured</h5>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title m-0">Project Picture</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <img src="<?php echo base_url('') . 'gambar/' . $getDtlProjectHdr['foto'] ?>" width="300px" height="150px" alt="" srcset="">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <h6 class="card-title">Special title treatment</h6>
-
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <div class="col-md-12">
+                                    <div class="card card-primary card-outline">
+                                        <div class="card-header">
+                                            <h5 class="card-title m-0">Project Description</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text"><?php echo $getProject['project_description'] ?></php>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="col-md-12">
+                                    <div class="card card-primary card-outline">
+                                        <div class="card-header">
+                                            <h5 class="card-title m-0">Project Information</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <?php $queryInformation_cons = $this->db->query('select * from project_information where master_project_id = "' . $query['master_project_id'] . '" and kind_of_consultant = "Consultant" order by master_project_id asc') ?>
+                                            <?php $queryInformation_mit = $this->db->query('select * from project_information where master_project_id = "' . $query['master_project_id'] . '" and kind_of_consultant = "Mitra" order by master_project_id asc') ?>
+                                            <div class="title">
+                                                <small>Consultant List</small>
+                                            </div>
+                                            <table class="table table-responsive">
 
-                            <div class="card card-primary card-outline">
-                                <div class="card-header">
-                                    <h5 class="card-title m-0">Featured</h5>
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="card-title">Special title treatment</h6>
+                                                <?php $no = 0;
+                                                foreach ($queryInformation_cons->result() as $row) { ?>
+                                                    <tr>
+                                                        <th>
+                                                            Consultant <?php echo ++$no; ?> Name
+                                                        </th>
+                                                        <td><?php echo $row->consultant_name; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            Contract Value
+                                                        </th>
+                                                        <td><?php echo $row->contract_price; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            Termyn Value
+                                                        </th>
+                                                        <td><?php echo $row->termyn_value; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            Payed
+                                                        </th>
+                                                        <td><?php echo $row->payed; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            Consultant Time
+                                                        </th>
+                                                        <td><?php echo $row->waktu_konsultan_mitra; ?></td>
+                                                    </tr>
+                                                <?php } ?>
+                                            </table>
+                                            <div class="title">
+                                                <small>Mitra/Calon Mitra</small>
+                                            </div>
+                                            <table class="table table-responsive">
 
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                                                <?php $no = 0;
+                                                foreach ($queryInformation_mit->result() as $row) { ?>
+                                                    <tr>
+                                                        <th>
+                                                            Mitra/Calon Mitra <?php echo ++$no; ?>
+                                                        </th>
+                                                        <td><?php echo $row->consultant_name; ?></td>
+                                                    </tr>
+
+                                                <?php } ?>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
