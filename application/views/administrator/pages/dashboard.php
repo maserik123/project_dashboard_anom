@@ -2,142 +2,20 @@
     <div class="container-fluid">
         <!-- Info boxes -->
 
-        <div class="row">
-            <div class="col-md-12">
-                <small style="font-weight: bold;">Project by Active Status</small>
-            </div>
-            <div class="col-lg-3 col-6">
-                <!-- small card -->
-                <div class="small-box bg-primary">
-                    <div class="inner">
-                        <h3><?php echo $projectActiveMore30Day['total']; ?></h3>
-
-                        <p>Active More 30 than Days</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">
-                        Project Totals
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small card -->
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3><?php echo $projectActiveMin30Day['total']; ?></h3>
-
-                        <p>Active Less than 30 Days</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">
-                        Project Totals
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small card -->
-                <div class="small-box bg-danger">
-                    <div class="inner">
-                        <h3><?php echo $projectActive2Week['total']; ?></h3>
-
-                        <p>End in 2 Weeks</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">
-                        Project Totals
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small card -->
-                <div class="small-box bg-warning">
-                    <div class="inner">
-                        <h3><?php echo $projectActive1Week['total']; ?></h3>
-
-                        <p>End in 1 Week</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-chart-pie"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">
-                        Project Totals
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-        </div>
 
         <div class="row">
-            <div class="col-md-12">
-                <small style="font-weight: bold;">Project by Progress</small>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4">
-                <div class="info-box bg-green">
-
-                    <div class="info-box-content">
-                        <span class="info-box-text"><small><strong>Projects Total </strong>
-                                <br>(Finished 100%)</small></span>
-                        <span class="info-box-number">
-                            <?php echo $projectFinish100['total'] ?>
-                            <small>Items</small>
-                        </span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <div class="col-12 col-sm-6 col-md-4">
-                <div class="info-box bg-green">
-
-                    <div class="info-box-content">
-                        <span class="info-box-text"><small><strong>Projects Total</strong> <br> (Progress > 50%)</small></span>
-                        <span class="info-box-number">
-                            <?php echo $projectProgressMore50['total']; ?>
-                            <small>Items</small>
-                        </span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-4">
-
-                <div class="info-box bg-green">
-                    <div class="info-box-content">
-                        <span class="info-box-text"> <small><strong>Projects Total</strong> <br> (Progress < 50%)</small></span>
-                        <span class="info-box-number">
-                            <?php echo $projectProgressMin50['total']; ?>
-                            <small>Items</small>
-                        </span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-
             <!-- fix for small devices only -->
             <div class="clearfix hidden-md-up">
             </div>
             <div class="col-md-12">
-                <small style="font-weight: bold;">Project by Criteria</small>
+                <small style="font-weight: bold;">Project by Criteria/Type</small>
             </div>
             <?php foreach ($getCriteria as $row) {
                 $query = $this->db->query('SELECT COUNT(a.project_m_hdr_id) AS total FROM project_m_hdr a 
                 INNER JOIN master_project b ON b.master_project_id = a.master_project_id WHERE b.criteria_project_id ="' . $row->criteria_project_id . '" order by b.criteria_project_id asc')->row_array();
             ?>
                 <div class="col-12 col-sm-6 col-md-2">
-                    <div class="info-box bg-red">
+                    <div class="info-box bg-<?php echo $row->color_status; ?>">
 
                         <div class="info-box-content">
                             <span class="info-box-text">
@@ -187,6 +65,10 @@
                             table = $('#projectHeader').DataTable({
                                 "processing": true,
                                 "serverSide": true,
+                                dom: 'Bfrtip',
+                                buttons: [
+                                    'excel',
+                                ],
                                 "lengthMenu": [
                                     [10, 25, 50, -1],
                                     [10, 25, 50, "All"]
@@ -221,7 +103,7 @@
                                             <th rowspan="2">Projects Details</th>
                                             <th rowspan="2">Projects Name</th>
                                             <th rowspan="2">PIC</th>
-                                            <th rowspan="2">Criteria/Type Projects</th>
+                                            <th rowspan="2">Type Projects</th>
                                             <th colspan="2">Waktu</th>
                                             <th rowspan="2">Capex Budget</th>
                                             <th rowspan="2">Contract Value</th>
@@ -237,6 +119,11 @@
                                     <tbody style="font-size: 13px;"></tbody>
 
                                 </table>
+                                <small class="badge text-white" style="background-color:blue">Up to date</small>
+                                <small class="badge text-white" style="background-color:green">2 - 7 Days</small>
+                                <small class="badge text-white" style="background-color:orange">1 - 2 Weeks</small>
+                                <small class="badge text-white" style="background-color:red">> 2 Weeks</small>
+                                <small class="badge text-white" style="background-color:grey">Not Started</small>
                             </div>
                             <!-- /.card-body -->
                         </div>
@@ -253,8 +140,8 @@
                                 <?php $q_mitigation_complete = $this->db->query('SELECT COUNT(*) AS complete_mitigation FROM risk_mitigation WHERE checklist = 1')->row_array(); ?>
                                 <?php $q_problem = $this->db->query('SELECT COUNT(*) AS tot_problem FROM issue_problem')->row_array(); ?>
                                 <?php $q_problem_complete = $this->db->query("SELECT COUNT(*) AS complete_problem FROM issue_problem WHERE STATUS = 'completed'")->row_array(); ?>
-                                <div class="description-block border-right">
-                                    <span class="description-percentage text-success"> Actual : <?php echo rupiah_format($q_rev['actual_tot']); ?></span>
+                                <div class="description-block border-right bg-orange">
+                                    <span class="description-percentage text-white"> Actual : <?php echo rupiah_format($q_rev['actual_tot']); ?></span>
                                     <h5 class="description-header">Plan : <?php echo rupiah_format($q_rev['plan_tot']); ?></h5>
                                     <span class="description-text">TOTAL REVENUE (Rp. Juta)</span>
                                 </div>
@@ -262,8 +149,8 @@
                             </div>
                             <!-- /.col -->
                             <div class="col-sm-3 col-6">
-                                <div class="description-block border-right">
-                                    <span class="description-percentage text-warning"> Actual : <?php echo rupiah_format($q_cost_capex['actual_tot']); ?></span>
+                                <div class="description-block border-right bg-red">
+                                    <span class="description-percentage text-white"> Actual : <?php echo rupiah_format($q_cost_capex['actual_tot']); ?></span>
                                     <h5 class="description-header">Plan : <?php echo rupiah_format($q_cost_capex['plan_tot']); ?></h5>
                                     <span class="description-text">TOTAL COST (Rp. Juta)</span>
                                 </div>
@@ -271,8 +158,8 @@
                             </div>
                             <!-- /.col -->
                             <div class="col-sm-3 col-6">
-                                <div class="description-block border-right">
-                                    <span class="description-percentage text-primary">Mitigasi Selesai : <?php echo $q_mitigation_complete['complete_mitigation']; ?></span>
+                                <div class="description-block border-right bg-green">
+                                    <span class="description-percentage text-white">Mitigasi Selesai : <?php echo $q_mitigation_complete['complete_mitigation']; ?></span>
                                     <h5 class="description-header">Jumlah Mitigasi : <?php echo $q_mitigation['tot_mitigation']; ?></h5>
                                     <span class="description-text">KEPATUHAN MANRIS</span>
                                 </div>
@@ -280,9 +167,9 @@
                             </div>
                             <!-- /.col -->
                             <div class="col-sm-3 col-6">
-                                <div class="description-block">
+                                <div class="description-block bg-blue">
                                     <!-- <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> -->
-                                    <span class="description-percentage text-danger">Isu Selesai : <?php echo $q_problem_complete['complete_problem'] ?></span>
+                                    <span class="description-percentage text-white">Isu Selesai : <?php echo $q_problem_complete['complete_problem'] ?></span>
                                     <h5 class="description-header">Jumlah Isu : <?php echo $q_problem['tot_problem']; ?></h5>
                                     <span class="description-text">ISU PERMASALAHAN</span>
                                 </div>
@@ -304,7 +191,7 @@
                     <div class="card-header">
                         <h5 class="card-title">
                             <i class="fas fa-table"></i>
-                            By Status in 2023
+                            By Status in <?php echo date('Y'); ?>
                         </h5>
 
                         <div class="card-tools">
@@ -403,7 +290,7 @@
                     <div class="card-header">
                         <h5 class="card-title">
                             <i class="fas fa-table"></i>
-                            By Type/Criteria in 2023
+                            By Type/Criteria in <?php echo date('Y'); ?>
                         </h5>
 
                         <div class="card-tools">
@@ -562,6 +449,162 @@
                 <!-- /.card -->
             </div>
             <!-- /.col -->
+        </div>
+        <script>
+            am4core.ready(function() {
+
+                // Themes begin
+                am4core.useTheme(am4themes_animated);
+                // Themes end
+
+
+
+                var chart = am4core.create('chartdiv5', am4charts.XYChart)
+                chart.colors.step = 2;
+
+                chart.legend = new am4charts.Legend()
+                chart.legend.position = 'top'
+                chart.legend.paddingBottom = 20
+                chart.legend.labels.template.maxWidth = 95
+
+                var xAxis = chart.xAxes.push(new am4charts.CategoryAxis())
+                xAxis.dataFields.category = 'category'
+                xAxis.renderer.cellStartLocation = 0.1
+                xAxis.renderer.cellEndLocation = 0.9
+                xAxis.renderer.grid.template.location = 0;
+
+                var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                yAxis.min = 0;
+
+                function createSeries(value, name) {
+                    var series = chart.series.push(new am4charts.ColumnSeries())
+                    series.dataFields.valueY = value
+                    series.dataFields.categoryX = 'category'
+                    series.name = name
+
+                    series.events.on("hidden", arrangeColumns);
+                    series.events.on("shown", arrangeColumns);
+
+                    var bullet = series.bullets.push(new am4charts.LabelBullet())
+                    bullet.interactionsEnabled = false
+                    bullet.dy = 30;
+                    bullet.label.text = '{valueY}'
+                    bullet.label.fill = am4core.color('#ffffff')
+
+                    return series;
+                }
+                <?php $getBulan = $this->db->query('select month(crt_date) as bulan from project_m_hdr a
+                                inner join master_project b ON b.master_project_id = a.master_project_id
+                                group by month(a.crt_date), b.criteria_project_id ')->result(); ?>
+
+                chart.data = [
+                    <?php foreach ($getBulan as $row) { ?> {
+                            <?php $getType = $this->db->query('select b.criteria_project_id, c.criteria_project_name from project_m_hdr a
+                                inner join master_project b ON b.master_project_id = a.master_project_id
+                                inner join criteria_project c on c.criteria_project_id = b.criteria_project_id 
+                                where month(a.crt_date) = ' . $row->bulan . ' group by b.criteria_project_id')->result(); ?>
+                            category: '<?php echo getBulan($row->bulan); ?>',
+                                <?php foreach ($getType as $c) { ?>
+                            <?php $getByCriteriaID = $this->db->query("SELECT COUNT(*) as jlh FROM project_m_hdr a
+                                inner join master_project b ON b.master_project_id = a.master_project_id
+                                WHERE b.criteria_project_id = " . $c->criteria_project_id)->row_array(); ?>
+
+                            <?php echo $c->criteria_project_id ?>: <?php echo ($getByCriteriaID['jlh'] == '' || empty($getByCriteriaID['jlh'])) ? 0 : $getByCriteriaID['jlh']; ?>,
+                            <?php } ?>
+                        },
+
+                    <?php } ?>
+
+                ]
+
+                <?php foreach ($getType as $b) { ?>
+                    createSeries('<?php echo $b->criteria_project_id ?>', '<?php echo $b->criteria_project_name; ?>');
+                <?php } ?>
+
+                function arrangeColumns() {
+
+                    var series = chart.series.getIndex(0);
+
+                    var w = 1 - xAxis.renderer.cellStartLocation - (1 - xAxis.renderer.cellEndLocation);
+                    if (series.dataItems.length > 1) {
+                        var x0 = xAxis.getX(series.dataItems.getIndex(0), "categoryX");
+                        var x1 = xAxis.getX(series.dataItems.getIndex(1), "categoryX");
+                        var delta = ((x1 - x0) / chart.series.length) * w;
+                        if (am4core.isNumber(delta)) {
+                            var middle = chart.series.length / 2;
+
+                            var newIndex = 0;
+                            chart.series.each(function(series) {
+                                if (!series.isHidden && !series.isHiding) {
+                                    series.dummyData = newIndex;
+                                    newIndex++;
+                                } else {
+                                    series.dummyData = chart.series.indexOf(series);
+                                }
+                            })
+                            var visibleCount = newIndex;
+                            var newMiddle = visibleCount / 2;
+
+                            chart.series.each(function(series) {
+                                var trueIndex = chart.series.indexOf(series);
+                                var newIndex = series.dummyData;
+
+                                var dx = (newIndex - trueIndex + middle - newMiddle) * delta
+
+                                series.animate({
+                                    property: "dx",
+                                    to: dx
+                                }, series.interpolationDuration, series.interpolationEasing);
+                                series.bulletsContainer.animate({
+                                    property: "dx",
+                                    to: dx
+                                }, series.interpolationDuration, series.interpolationEasing);
+                            })
+                        }
+                    }
+                }
+
+            }); // end am4core.ready()
+        </script>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="fas fa-table"></i>
+                            Project Cumulative <?php echo date('Y'); ?>
+                        </h5>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fas fa-wrench"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                    <a href="#" class="dropdown-item">Action</a>
+                                    <a href="#" class="dropdown-item">Another action</a>
+                                    <a href="#" class="dropdown-item">Something else here</a>
+                                    <a class="dropdown-divider"></a>
+                                    <a href="#" class="dropdown-item">Separated link</a>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <!-- Chart code -->
+
+
+                            <div id="chartdiv5" style="height: 400px;font-size:10px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
         </div>
 
 

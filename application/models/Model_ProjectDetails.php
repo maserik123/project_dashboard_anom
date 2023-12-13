@@ -12,7 +12,7 @@ class Model_ProjectDetails extends CI_Model
 
     function getAllData()
     {
-        $this->datatables->select('project_m_dtl_id, project_name, project_activity, pic_project_name, dateline, progress, ket,ket');
+        $this->datatables->select('project_m_dtl_id, project_name, project_activity, pic_project_name, dateline, progress, tipe, ket,ket');
         $this->datatables->from('v_project_m_dtl');
         return $this->datatables->generate();
     }

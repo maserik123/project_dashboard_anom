@@ -65,18 +65,14 @@
             dataType: "JSON",
             success: function(resp) {
                 data = resp.data
-                $('[name="project_m_hdr_id"]').val(data.project_m_hdr_id);
+                $('[name="project_m_dtl_id"]').val(data.project_m_dtl_id);
                 $('[name="master_project_id"]').val(data.master_project_id);
-                $('[name="pic_project_hdr_id"]').val(data.pic_project_hdr_id);
-                $('[name="criteria_project_id"]').val(data.criteria_project_id);
-                $('[name="start_date"]').val(data.start_date);
-                $('[name="end_date"]').val(data.end_date);
-                $('[name="capex_budget"]').val(data.capex_budget);
-                $('[name="capex_realization"]').val(data.capex_realization);
-                $('[name="revenue_target"]').val(data.revenue_target);
-                $('[name="revenue_realization"]').val(data.revenue_realization);
-                $('[name="project_status_id"]').val(data.project_status_id);
+                $('[name="project_activity"]').val(data.project_activity);
+                $('[name="tipe"]').val(data.tipe);
+                $('[name="pic_project_dtl_id"]').val(data.pic_project_dtl_id);
+                $('[name="dateline"]').val(data.dateline);
                 $('[name="progress"]').val(data.progress);
+                $('[name="ket"]').val(data.ket);
                 // $('[name="criteria_project_name"]').val(data.criteria_project_name);
                 $('#modalMasterProject').modal('show');
                 $('.modal-title').text('Edit Data Master Project');
@@ -240,6 +236,7 @@
                                     <th>PIC Project Name</th>
                                     <th>Date Line</th>
                                     <th>Progress</th>
+                                    <th>Type</th>
                                     <th>Remarks</th>
                                     <th>Tools</th>
                                 </tr>
@@ -274,6 +271,18 @@
                                 <?php foreach ($getMasterProject as $row) { ?>
                                     <option value="<?php echo $row->master_project_id; ?>"><?php echo $row->project_name; ?></option>
                                 <?php } ?>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-12 col-sm-3 col-xs-12"> Type <span class="required">*</span>
+                        </label>
+                        <div class="col-md-12 col-sm-9 col-xs-12">
+                            <select name="tipe" id="tipe" class="form-control">
+                                <option value="">Select Type</option>
+                                <option value="fisik">Fisik</option>
+                                <option value="kajian">Kajian</option>
                             </select>
 
                         </div>

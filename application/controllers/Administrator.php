@@ -88,22 +88,15 @@ class Administrator extends CI_Controller
                 $th2   = '<div class="text-center" style="width:100px;">' . (get_btn_detail('detail_dashboard(' . $userid . ')')) . '</div>';
                 $th3    = '<div class="text-center">' . $row->project_name . '</div>';
                 $th4    = '<div class="text-center">' . $row->pic_project_name . '</div>';
-                $th5    = '<div class="text-center">' . $row->criteria_project_name . '</div>';
-                $th6    = '<div class="text-center">' . $row->start_date . '</div>';
-                $th7    = '<div class="text-center">' . $row->end_date . '</div>';
-                $th9    = '<div class="text-center">' . $row->capex_budget . '</div>';
-                $th10    = '<div class="text-center">' . $row->capex_realization . '</div>';
-                $th11    = '<div class="text-center">' . $row->contract_value . '</div>';
-                $th12    = '<div class="text-center">' . $row->revenue_target . '</div>';
-                $th13    = '<div class="text-center">' . $row->revenue_realization . '</div>';
-                $th14    = '<div class="text-center">' . $row->status_name . '</div>';
-                $th15    = '<div class="text-center">' . $row->progress_project . '</div>';
-                $th16    = '<div class="text-center">' . $row->progress_fisik . '</div>';
-                $th17    = '<div class="text-center">' . $row->progress_kajian . '</div>';
-                $th18    = '<div class="text-center">' . $row->mitigation . '</div>';
-                $th19    = '<div class="text-center">' . $row->checklist . '</div>';
-                $th20    = '<div class="text-center">' . $row->update_status . '</div>';
-                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th9, $th10, $th11, $th12, $th13, $th14, $th15, $th16, $th17, $th18, $th19, $th20));
+                $th5    = '<div class="text-white badge" style="background-color:' . $row->criteria_color . ';color:white;">' . $row->criteria_project_name . '</div>';
+                $th6    = '<div class="text-center">' . tgl_indo($row->start_date) . '</div>';
+                $th7    = '<div class="text-center">' . tgl_indo($row->end_date) . '</div>';
+                $th8    = '<div class="text-center">' . rupiah_format($row->capex_budget) . '</div>';
+                $th9    = '<div class="text-center">' . rupiah_format($row->contract_value) . '</div>';
+                $th10    = '<div class="text-white badge" style="background-color:' . $row->status_color . '">' . $row->status_name . '</div>';
+                $th11    = ($row->progress_project == '' || empty($row->progress_project) || $row->progress_project == null) ? '0 %' : $row->progress_project . '%';
+                $th12    = '<div class="text-white badge" style="background-color:' . $row->color_update_status . '">' . $row->update_status . '</div>';
+                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th8, $th9, $th10, $th11, $th12));
             }
             $dt['data'] = $data;
             echo json_encode($dt);
@@ -257,9 +250,10 @@ class Administrator extends CI_Controller
                 $th4    = '<div class="text-center">' . $row->pic_project_name . '</div>';
                 $th5    = '<div class="text-center">' . $row->dateline . '</div>';
                 $th6    = '<div class="text-center">' . $row->progress . '</div>';
-                $th7    = '<div class="text-center">' . $row->ket . '</div>';
-                $th8   = '<div class="text-center" style="width:100px;">' . (get_btn_group1('updateData(' . $userid . ')', 'deleteData(' . $userid . ')')) . '</div>';
-                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th8));
+                $th7    = '<div class="text-center">' . $row->tipe . '</div>';
+                $th8    = '<div class="text-center">' . $row->ket . '</div>';
+                $th9   = '<div class="text-center" style="width:100px;">' . (get_btn_group1('updateData(' . $userid . ')', 'deleteData(' . $userid . ')')) . '</div>';
+                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th8, $th9));
             }
             $dt['data'] = $data;
             echo json_encode($dt);
@@ -270,6 +264,7 @@ class Administrator extends CI_Controller
             $this->form_validation->set_rules("pic_project_dtl_id", "PIC Project", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("dateline", "Date Line", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("progress", "Progress", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("tipe", "Type", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("ket", "Keterangan", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_error_delimiters('<small id="text-error" style="color:red;">* ', '</small>');
             if ($this->form_validation->run() == FALSE) {
@@ -285,6 +280,7 @@ class Administrator extends CI_Controller
                     'dateline'          => htmlspecialchars($this->input->post('dateline')),
                     'progress'          => htmlspecialchars($this->input->post('progress')),
                     'ket'               => htmlspecialchars($this->input->post('ket')),
+                    'tipe'               => htmlspecialchars($this->input->post('tipe')),
                 );
                 $result['messages'] = '';
                 $result = array('status' => 'success', 'msg' => 'Data Inserted!');
@@ -308,6 +304,7 @@ class Administrator extends CI_Controller
             $this->form_validation->set_rules("dateline", "Date Line", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("progress", "Progress", "trim|required", array('required' => '{field} cannot be null !'));
             $this->form_validation->set_rules("ket", "Keterangan", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("tipe", "Type", "trim|required", array('required' => '{field} cannot be null !'));
 
             $this->form_validation->set_error_delimiters('<small id="text-error" style="color:red;">*', '</small>');
             if ($this->form_validation->run() == FALSE) {
@@ -324,6 +321,7 @@ class Administrator extends CI_Controller
                     'dateline'          => htmlspecialchars($this->input->post('dateline')),
                     'progress'          => htmlspecialchars($this->input->post('progress')),
                     'ket'               => htmlspecialchars($this->input->post('ket')),
+                    'tipe'               => htmlspecialchars($this->input->post('tipe')),
                 );
                 $result['messages']    = '';
                 $result        = array('status' => 'success', 'msg' => 'Update Success !');
@@ -1036,6 +1034,315 @@ class Administrator extends CI_Controller
             $this->Model_IssueProblem->delete($id);
             $result = array('status' => 'success', 'msg' => 'Success Deleted !');
             echo json_encode(array('result' => $result));
+            die;
+        }
+    }
+
+    function user($param = '', $id = '')
+    {
+        if (empty($param)) {
+            $view['title'] = 'User';
+            $view['pageName'] = 'user';
+            $view['active_user'] = 'active';
+            $view['listUser'] = $this->Model_user->getData();
+            $view['listUserRole'] = $this->Model_user_role->getData();
+            $this->load->view('administrator/index', $view);
+        } else if ($param == 'getAllData') {
+            $dt = $this->Model_user->getAllData();
+            $start = $this->input->post('start');
+            $data = array();
+            foreach ($dt['data'] as $row) {
+                $userid     = ($row->userid);
+                $th1    = '<div class="text-center">' . ++$start . '</div>';
+                $th2    = '<div class="text-left">' . $row->full_name . '</div>';
+                $th3    = '<div class="text-center">' . $row->nick_name . '</div>';
+                $th4    = '<div class="text-center">' . $row->initial . '</div>';
+                $th5    = '<div class="text-center">' . $row->NIP . '</div>';
+                $th6    = '<div class="text-center">' . $row->email . '</div>';
+                $th7    = '<div class="text-center">' . $row->address . '</div>';
+                $th8    = '<div class="text-center">' . $row->phone_number . '</div>';
+                // $th9    = '<div class="text-center">' . $row->picture . '</div>';
+                $th9   = '<div class="text-center" style="width:100px;">' . (get_btn_group1('update_user(' . $userid . ')', 'delete_user(' . $userid . ')')) . '</div>';
+                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th8, $th9));
+            }
+            $dt['data'] = $data;
+            echo json_encode($dt);
+            die;
+        } else if ($param == 'insert') {
+            $this->form_validation->set_rules("full_name", "Full Name", "trim|required|alpha_numeric_spaces", array('required' => '{field} cannot be null !', 'alpha_numeric_spaces' => 'Character not allowed !'));
+            $this->form_validation->set_rules("nick_name", "Nick Name", "trim|required|alpha_numeric_spaces", array('required' => '{field} cannot be null !', 'alpha_numeric_spaces' => 'Character not allowed !'));
+            $this->form_validation->set_rules("initial", "Initial", "trim|required|alpha_numeric_spaces", array('required' => '{field} cannot be null !', 'alpha_numeric_spaces' => 'Character not allowed !'));
+            $this->form_validation->set_rules("NIP", "NIP", "trim|required|alpha_numeric_spaces", array('required' => '{field} cannot be null !', 'alpha_numeric_spaces' => 'Character not allowed !'));
+            $this->form_validation->set_rules("email", "Email", "trim|required", array('required' => '{field} cannot be null !', 'alpha_numeric_spaces' => 'Character not allowed!'));
+            $this->form_validation->set_rules("address", "Address", "trim|required|alpha_numeric_spaces", array('required' => '{field} cannot be null !', 'alpha_numeric_spaces' => 'Character not allowed !'));
+            $this->form_validation->set_rules("phone_number", "Phone Number", "trim|required|alpha_numeric_spaces", array('required' => '{field} cannot be null !', 'alpha_numeric_spaces' => 'Character not allowed !'));
+
+            $this->form_validation->set_error_delimiters('<h6 id="text-error" class="help-block help-block-error">* ', '</h6>');
+            if ($this->form_validation->run() == FALSE) {
+                $result = array('status' => 'error', 'msg' => 'Data is not right, please check again.');
+                foreach ($_POST as $key => $value) {
+                    $result['messages'][$key] = form_error($key);
+                }
+            } else {
+                $data = array(
+                    'full_name'          => htmlspecialchars($this->input->post('full_name')),
+                    'nick_name'          => htmlspecialchars($this->input->post('nick_name')),
+                    'initial'            => htmlspecialchars($this->input->post('initial')),
+                    'NIP'                => htmlspecialchars($this->input->post('NIP')),
+                    'email'              => htmlspecialchars($this->input->post('email')),
+                    'address'            => htmlspecialchars($this->input->post('address')),
+                    'phone_number'       => htmlspecialchars($this->input->post('phone_number')),
+                );
+                $result['messages'] = '';
+                $result = array('status' => 'success', 'msg' => 'Data Inserted!');
+                $this->Model_user->addData($data);
+                // $this->B_user_log_model->addLog(userLog('Add Data', $this->session->userdata('first_name') . ' Add data Tracer Study Program Study', $this->session->userdata('id')));
+            }
+
+            $csrf = array(
+                'token' => $this->security->get_csrf_hash()
+            );
+            echo json_encode(array('result' => $result, 'csrf' => $csrf));
+            die;
+        } else if ($param == 'getById') {
+            $data = $this->Model_user->getById($id);
+            echo json_encode(array('data' => $data));
+            die;
+        } else if ($param == 'update') {
+            $this->form_validation->set_rules("full_name", "Full Name", "trim|required|alpha_numeric_spaces", array('required' => '{field} cannot be null !', 'alpha_numeric_spaces' => 'Character not allowed !'));
+            $this->form_validation->set_rules("nick_name", "Nick Name", "trim|required|alpha_numeric_spaces", array('required' => '{field} cannot be null !', 'alpha_numeric_spaces' => 'Character not allowed !'));
+            $this->form_validation->set_rules("initial", "Initial", "trim|required|alpha_numeric_spaces", array('required' => '{field} cannot be null !', 'alpha_numeric_spaces' => 'Character not allowed !'));
+            $this->form_validation->set_rules("NIP", "NIP", "trim|required|alpha_numeric_spaces", array('required' => '{field} cannot be null !', 'alpha_numeric_spaces' => 'Character not allowed !'));
+            $this->form_validation->set_rules("email", "Email", "trim|required", array('required' => '{field} cannot be null !', 'alpha_numeric_spaces' => 'Character not allowed!'));
+            $this->form_validation->set_rules("address", "Address", "trim|required|alpha_numeric_spaces", array('required' => '{field} cannot be null !', 'alpha_numeric_spaces' => 'Character not allowed !'));
+            $this->form_validation->set_rules("phone_number", "Phone Number", "trim|required|alpha_numeric_spaces", array('required' => '{field} cannot be null !', 'alpha_numeric_spaces' => 'Character not allowed !'));
+
+            $this->form_validation->set_error_delimiters('<small id="text-error" style="color:red;">*', '</small>');
+            if ($this->form_validation->run() == FALSE) {
+                $result = array('status' => 'error', 'msg' => 'Data yang anda isi belum benar !');
+                foreach ($_POST as $key => $value) {
+                    $result['messages'][$key] = form_error($key);
+                }
+            } else {
+                $aidi = $this->input->post('userid');
+                $data = array(
+                    'full_name'          => htmlspecialchars($this->input->post('full_name')),
+                    'nick_name'          => htmlspecialchars($this->input->post('nick_name')),
+                    'initial'            => htmlspecialchars($this->input->post('initial')),
+                    'NIP'                => htmlspecialchars($this->input->post('NIP')),
+                    'email'              => htmlspecialchars($this->input->post('email')),
+                    'address'            => htmlspecialchars($this->input->post('address')),
+                    'phone_number'       => htmlspecialchars($this->input->post('phone_number')),
+                );
+                $result['messages']    = '';
+                $result        = array('status' => 'success', 'msg' => 'Data Berhasil diubah');
+                $this->Model_user->update($aidi, $data);
+            }
+            $csrf = array(
+                'token' => $this->security->get_csrf_hash()
+            );
+            echo json_encode(array('result' => $result, 'csrf' => $csrf));
+            die;
+        } else if ($param == 'delete') {
+            $this->Model_user->delete($id);
+            $result = array('status' => 'success', 'msg' => 'Data berhasil dihapus !');
+            echo json_encode(array('result' => $result));
+            die;
+        }
+    }
+
+    function userLogin($param = '', $id = '')
+    {
+        if (empty($param)) {
+            $view['listUser'] = $this->Model_user->getData();
+            $this->load->view('administrator/index', $view);
+        } else if ($param == 'getAllData') {
+            $dt = $this->Model_user_login->getAllData();
+            $start = $this->input->post('start');
+            $data = array();
+            foreach ($dt['data'] as $row) {
+                $user_login_id     = $row->user_login_id;
+                $th1    = '<div class="text-center">' . ++$start . '</div>';
+                $th2    = '<div class="text-left">' . $row->full_name . '</div>';
+                $th3    = '<div class="text-center">' . $row->nick_name . '</div>';
+                $th4    = '<div class="text-center">' . $row->initial . '</div>';
+                $th5    = '<div class="text-center">' . $row->NIP . '</div>';
+                $th6    = '<div class="text-center">' . $row->email . '</div>';
+                $th7    = '<div class="text-center">' . $row->address . '</div>';
+                $th8    = '<div class="text-center">' . $row->phone_number . '</div>';
+                $th9    = '<div class="text-center">' . $row->username . '</div>';
+                $th10    = '<div class="text-center">' . $row->role . '</div>';
+                if ($row->block_status == 0) {
+                    $th11    = '<div class="text-center btn btn-primary btn-sm">Unblocked</div>';
+                } else {
+                    $th11    = '<div class="text-center btn btn-danger btn-sm">Blocked</div>';
+                }
+                $th12   = '<div class="text-center" style="width:100px;">' . (get_btn_group1('update_user_login(' . $user_login_id . ')', 'delete_user_login(' . $user_login_id . ')')) . '</div>';
+                $data[] = gathered_data(array($th1, $th2, $th3, $th4, $th5, $th6, $th7, $th8, $th9, $th10, $th11, $th12));
+            }
+            $dt['data'] = $data;
+            echo json_encode($dt);
+            die;
+        } else if ($param == 'insert') {
+            $this->form_validation->set_rules("userid", "Pilih Pengguna", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("username", "Username", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("password", "Password", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("user_role_id", "Pilih Role", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("block_status", "Status Blokir", "trim|required", array('required' => '{field} cannot be null !'));
+
+            $this->form_validation->set_error_delimiters('<h6 id="text-error" class="help-block help-block-error">* ', '</h6>');
+            if ($this->form_validation->run() == FALSE) {
+                $result = array('status' => 'error', 'msg' => 'Data is not right, please check again.');
+                foreach ($_POST as $key => $value) {
+                    $result['messages'][$key] = form_error($key);
+                }
+            } else {
+                $password = md5(htmlspecialchars($this->input->post('password')));
+                $data = array(
+                    'userid'           => htmlspecialchars($this->input->post('userid')),
+                    'username'         => htmlspecialchars($this->input->post('username')),
+                    'password'         => $password,
+                    'user_role_id'     => htmlspecialchars($this->input->post('user_role_id')),
+                    'block_status'     => htmlspecialchars($this->input->post('block_status')),
+                );
+                $result['messages'] = '';
+                $result = array('status' => 'success', 'msg' => 'Data Inserted!');
+                $this->Model_user_login->addData($data);
+                // $this->B_user_log_model->addLog(userLog('Add Data', $this->session->userdata('first_name') . ' Add data Tracer Study Program Study', $this->session->userdata('id')));
+            }
+
+            $csrf = array(
+                'token' => $this->security->get_csrf_hash()
+            );
+            echo json_encode(array('result' => $result, 'csrf' => $csrf));
+            die;
+        } else if ($param == 'getById') {
+            $data = $this->Model_user_login->getById($id);
+            echo json_encode(array('data' => $data));
+            die;
+        } else if ($param == 'update') {
+            $this->form_validation->set_rules("userid", "Pilih Pengguna", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("username", "Username", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("password", "Password", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("user_role_id", "Pilih Role", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("block_status", "Status Blokir", "trim|required", array('required' => '{field} cannot be null !'));
+
+            $this->form_validation->set_error_delimiters('<small id="text-error" style="color:red;">*', '</small>');
+            if ($this->form_validation->run() == FALSE) {
+                $result = array('status' => 'error', 'msg' => 'Data yang anda isi belum benar !');
+                foreach ($_POST as $key => $value) {
+                    $result['messages'][$key] = form_error($key);
+                }
+            } else {
+                $aidi = $this->input->post('user_login_id');
+                $password = md5(htmlspecialchars($this->input->post('password')));
+
+                $data = array(
+                    'userid'           => htmlspecialchars($this->input->post('userid')),
+                    'username'         => htmlspecialchars($this->input->post('username')),
+                    'password'         => $password,
+                    'user_role_id'     => htmlspecialchars($this->input->post('user_role_id')),
+                    'block_status'     => htmlspecialchars($this->input->post('block_status')),
+                );
+                $result['messages']    = '';
+                $this->Model_user_login->update($aidi, $data);
+                $result        = array('status' => 'success', 'msg' => 'Data Berhasil diubah');
+            }
+            $csrf = array(
+                'token' => $this->security->get_csrf_hash()
+            );
+            echo json_encode(array('result' => $result, 'csrf' => $csrf));
+            die;
+        } else if ($param == 'delete') {
+            $this->Model_user_login->delete($id);
+            $result = array('status' => 'success', 'msg' => 'Data berhasil dihapus !');
+            echo json_encode($result);
+            die;
+        }
+    }
+
+    function userRole($param = '', $id = '')
+    {
+        if (empty($param)) {
+        } else if ($param == 'getAllData') {
+            $dt = $this->Model_user_role->getAllData();
+            $start = $this->input->post('start');
+            $data = array();
+            foreach ($dt['data'] as $row) {
+                $user_role_id     = $row->user_role_id;
+                $th1    = '<div class="text-center">' . ++$start . '</div>';
+                $th2    = '<div class="text-left">' . $row->role . '</div>';
+                $th3    = '<div class="text-center">' . $row->description . '</div>';
+                if ($row->role == 'sys_manager') {
+                    $th4   = '<div class="text-center" style="width:100px;"> </div>';
+                } else {
+                    $th4   = '<div class="text-center" style="width:100px;">' . get_btn_group1('update_user_role(' . $user_role_id . ')', 'delete_user_role(' . $user_role_id . ')') . '</div>';
+                }
+                $data[] = gathered_data(array($th1, $th2, $th3, $th4));
+            }
+            $dt['data'] = $data;
+            echo json_encode($dt);
+            die;
+        } else if ($param == 'insert') {
+            $this->form_validation->set_rules("role", "Role", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("description", "Description", "trim|required", array('required' => '{field} cannot be null !'));
+
+            $this->form_validation->set_error_delimiters('<h6 id="text-error" class="help-block help-block-error">* ', '</h6>');
+            if ($this->form_validation->run() == FALSE) {
+                $result = array('status' => 'error', 'msg' => 'Data is not right, please check again.');
+                foreach ($_POST as $key => $value) {
+                    $result['messages'][$key] = form_error($key);
+                }
+            } else {
+                $data = array(
+                    'role'                => htmlspecialchars($this->input->post('role')),
+                    'description'                => htmlspecialchars($this->input->post('description')),
+
+                );
+                $result['messages'] = '';
+                $result = array('status' => 'success', 'msg' => 'Data Inserted!');
+                $this->Model_user_role->addData($data);
+                // $this->B_user_log_model->addLog(userLog('Add Data', $this->session->userdata('first_name') . ' Add data Tracer Study Program Study', $this->session->userdata('id')));
+            }
+
+            $csrf = array(
+                'token' => $this->security->get_csrf_hash()
+            );
+            echo json_encode(array('result' => $result, 'csrf' => $csrf));
+            die;
+        } else if ($param == 'getById') {
+            $data = $this->Model_user_role->getById($id);
+            echo json_encode(array('data' => $data));
+            die;
+        } else if ($param == 'update') {
+            $this->form_validation->set_rules("role", "Full Name", "trim|required", array('required' => '{field} cannot be null !'));
+            $this->form_validation->set_rules("description", "Nick Name", "trim|required", array('required' => '{field} cannot be null !'));
+
+            $this->form_validation->set_error_delimiters('<small id="text-error" style="color:red;">*', '</small>');
+            if ($this->form_validation->run() == FALSE) {
+                $result = array('status' => 'error', 'msg' => 'Data yang anda isi belum benar !');
+                foreach ($_POST as $key => $value) {
+                    $result['messages'][$key] = form_error($key);
+                }
+            } else {
+                $aidi = $this->input->post('user_role_id');
+                $data = array(
+                    'role'          => htmlspecialchars($this->input->post('role')),
+                    'description'   => htmlspecialchars($this->input->post('description'))
+                );
+                $result['messages']    = '';
+                $this->Model_user_role->update($aidi, $data);
+                $result        = array('status' => 'success', 'msg' => 'Data Berhasil diubah');
+            }
+            $csrf = array(
+                'token' => $this->security->get_csrf_hash()
+            );
+            echo json_encode(array('result' => $result, 'csrf' => $csrf));
+            die;
+        } else if ($param == 'delete') {
+            $this->Model_user_role->delete($id);
+            $result = array('status' => 'success', 'msg' => 'Data berhasil dihapus !');
+            echo json_encode($result);
             die;
         }
     }

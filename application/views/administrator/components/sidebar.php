@@ -144,6 +144,16 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="<?php echo base_url('administrator/user') ?>" class="nav-link <?php if (isset($a_user)) {
+                                                                                                echo $a_user;
+                                                                                            } ?>">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            User Managements
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="#" onclick="logout()" class="nav-link">
                         <i class="nav-icon fas fa-power-off"></i>
                         <p>
